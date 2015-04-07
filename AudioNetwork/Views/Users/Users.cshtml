@@ -1,0 +1,50 @@
+﻿<div ng-controller="UsersController">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="input-group">
+                    @*<input class="form-control form-group-sm" type="search" ng-model="search.$" placeholder="Поиск..." />*@
+                    <input class="form-control form-group-lg" type="search" ng-model="searchModel.FirstName" placeholder="Имя" />
+                    <input class="form-control form-group-lg" type="search" ng-model="searchModel.LastName" placeholder="Фамилия" />
+                    <input class="form-control form-group-lg" type="search" ng-model="searchModel.City" placeholder="Город" />
+                    <input class="form-control form-group-lg" type="search" ng-model="searchModel.Country" placeholder="Страна" />
+                    <input class="form-control form-group-lg" type="search" ng-model="searchModel.Genres" placeholder="Предпочитаемый жанр" />
+                    <input class="form-control form-group-lg" type="search" ng-model="searchModel.Atrists" placeholder="Предпочитаемый исполнитель" />
+                    <input class="form-control form-group-lg" type="date" ng-model="searchModel.BirthDate" placeholder="дата рождения" />
+                </div>
+
+            </div><div class="col-md-2">
+                <button class="btn btn-lg btn-default" type="button" ng-click="searchUsers()"><span class="glyphicon glyphicon-search"></span>Поиск</button>
+            </div>
+        </div>
+        <div class="row">
+            <div ng-repeat="user in users">
+                <div class="col-md-4 thumbnail">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="/#/Users/{{user.Id}} ">
+                                <img ng-src="{{user.AvatarFilePath}}" width="80" height="80">
+                            </a>
+
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <a href="/#/Users/{{user.Id}} ">
+                                    <span>{{user.UserName}}</span>
+                                </a>
+                                <span>{{user.LastActivity |ctime |date:'medium'}}</span>
+
+                            </div>
+                            <div class="row">
+                                <button class="btn-default pull-right" ng-click="addFriend(user)">
+                                    В друзья
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

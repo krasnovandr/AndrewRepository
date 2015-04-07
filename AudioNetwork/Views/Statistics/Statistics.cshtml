@@ -1,0 +1,51 @@
+﻿<div ng-controller="StatisticsController" class="container-fluid">
+
+    <div class="col-md-7">
+        <select class="form-control"
+                ng-model="currentStatisticType"
+                ng-change="changeStatisticType(type)"
+                ng-options="type as type.Name for type in statisticTypes"></select>
+        Всего {{favouriteSongs.length}} песен
+        <table class="table table-striped" >
+            <tr>
+                <th>Трэк</th>
+                <th>Продолжительность</th>
+                <th ng-show="currentStatisticType.Type==1 || currentStatisticType.Type==4">Прослушиваний</th>
+                <th ng-show="currentStatisticType.Type==2">Прослушано</th>
+                <th ng-show="currentStatisticType.Type==3">Добавлено</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="song in songs">
+                <td width="80%">
+                    <span>{{song.Artist}}</span>
+                    <span> - </span>
+                    <span>{{song.Title}}</span>
+
+                </td>
+                <td>
+                    <span>{{song.DurationFormatted}}</span>
+                </td>
+                <td ng-show="currentStatisticType.Type==1 || currentStatisticType.Type==4">
+                    <span>{{song.ListenCount}}</span>
+                </td>
+                <td ng-show="currentStatisticType.Type==2">
+                    <span>{{song.LastListenDateFormatted}}</span>
+                </td>
+                <td ng-show="currentStatisticType.Type==3">
+                    <span>{{song.AddDateFormatted}}</span>
+                </td>
+                <td>
+                    <button ng-show="CurrentSong.SongId!=song.SongId" class=" btn-default pull-right" ng-click="changeSongAndPlay(song)">
+                        <span class="glyphicon glyphicon-play"></span>
+                    </button>
+                    <button ng-show="CurrentSong.SongId==song.SongId && audio.paused == false" class="btn-default pull-right" ng-click="pause()">
+                        <span class="glyphicon glyphicon-pause"></span>
+                    </button>
+                    <button ng-show="CurrentSong.SongId==song.SongId && audio.paused == true" class="btn-default pull-right" ng-click="play()">
+                        <span class="glyphicon glyphicon-play"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
