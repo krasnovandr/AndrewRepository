@@ -1,4 +1,5 @@
-﻿using System.Net.Mail;
+﻿using System;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
@@ -17,6 +18,10 @@ namespace AudioNetwork
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
+                //ExpireTimeSpan = new TimeSpan(1,0,0,0),
+                CookieName = "AuthCoockie",
+                //CookieSecure = CookieSecureOption.Always,
+                
 
             });
             // Use a cookie to temporarily store information about a user logging in with a third party login provider

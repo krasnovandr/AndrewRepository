@@ -1,7 +1,7 @@
 ﻿angular.module('AudioNetworkApp').factory('uploadService', function ($http) {
     return {
         addUserVkInfo: function (userVkLogin) {
-            return $http({ method: 'POST', url: 'Upload/UploadSongVk', data: userVkLogin });
+            return $http({ method: 'POST', url: 'Upload/GetSongsVk', data: userVkLogin });
         },
         saveSong: function (song) {
             return $http({ method: 'POST', url: 'Upload/SaveSong', data: song });

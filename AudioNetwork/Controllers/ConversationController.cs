@@ -9,10 +9,10 @@ namespace AudioNetwork.Controllers
 {
     public class ConversationController : Controller
     {
-        private readonly ConversationService _conversationService;
+        private readonly IConversationService _conversationService;
 
         public ConversationController(
-            ConversationService conversationService)
+            IConversationService conversationService)
         {
             _conversationService = conversationService;
         }
@@ -31,16 +31,22 @@ namespace AudioNetwork.Controllers
         {
             return View("ViewConversation");
         }
-
+        
         public ActionResult ChangeAvatarModal()
         {
             return View("ChangeAvatarModal");
         }
 
-        public ActionResult GetMyConversations(int type)
+        public JsonResult GetMyConversations(int type)
         {
             var userId = User.Identity.GetUserId();
             return Json(_conversationService.GetConversations(type, userId), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetMusicConversations()
+        {
+            var userId = User.Identity.GetUserId();
+            return Json(_conversationService.GetMusicConversations(userId), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddConversation(ConversationViewModel conversationViewModel)

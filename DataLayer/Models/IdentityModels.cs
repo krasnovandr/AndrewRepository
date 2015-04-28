@@ -74,7 +74,7 @@ namespace DataLayer.Models
         public int Disc { get; set; }
         public string Performers { get; set; }
         public string FileName { get; set; }
-        public virtual ICollection<Playlist> Playlist { get; set; }
+        //public virtual ICollection<Playlist> Playlist { get; set; }
         // public virtual ICollection<Message> Messages { get; set; }
     }
 

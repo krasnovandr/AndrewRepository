@@ -7,10 +7,10 @@ namespace AudioNetwork.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
         public UsersController(
-            UserService userService)
+            IUserService userService)
         {
             _userService = userService;
         }
@@ -54,7 +54,7 @@ namespace AudioNetwork.Controllers
 
 
         [HttpGet]
-        public ActionResult GetUsers()
+        public JsonResult GetUsers()
         {
             var userId = User.Identity.GetUserId();
             return Json(_userService.GetUsers(userId), JsonRequestBehavior.AllowGet);

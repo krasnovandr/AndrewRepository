@@ -53,8 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\SongInfo.cs" />
-    <Compile Include="SongLyricsAndInfoGetter.cs" />
-    <Compile Include="UserSongsGet.cs" />
+    <Compile Include="VkSongInfoGetter.cs" />
     <Compile Include="VkAuthorization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

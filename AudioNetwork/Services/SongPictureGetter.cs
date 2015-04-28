@@ -72,21 +72,13 @@ namespace AudioNetwork.Services
             //ImageSaver.SongAlbumCoverPath + "default_song_album.jpg";
         }
 
-        public static void GetAndSavePictureByTag(Tag tag, string songCoverPath, string songId)
-        {
-            var ms = new MemoryStream(tag.Pictures[0].Data.Data);
-            var image = Image.FromStream(ms);
-            var pathSongAlbumCover = songCoverPath + songId + ".jpg";
-            image.Save(pathSongAlbumCover);
-        }
-
         private static AlbumTrackInfo CheckContent(string artist, string album, string track)
         {
             var lastFm = new LastFmService();
 
             if (string.IsNullOrEmpty(artist) == false && string.IsNullOrEmpty(album) == false)
             {
-                AlbumTrackInfo info = lastFm.getAlbumInfo(artist, album);
+                AlbumTrackInfo info = lastFm.GetAlbumInfo(artist, album);
 
                 if (info != null)
                 {
@@ -101,7 +93,7 @@ namespace AudioNetwork.Services
 
             if (string.IsNullOrEmpty(artist) == false && string.IsNullOrEmpty(track) == false)
             {
-                AlbumTrackInfo info = info = lastFm.getTrackInfo(artist, track);
+                AlbumTrackInfo info = info = lastFm.GetTrackInfo(artist, track);
 
                 if (info != null)
                 {
@@ -116,7 +108,7 @@ namespace AudioNetwork.Services
 
             if (string.IsNullOrEmpty(track) == false)
             {
-                AlbumTrackInfo info = info = lastFm.searchTrackInfo(track);
+                AlbumTrackInfo info = info = lastFm.SearchTrackInfo(track);
 
                 if (info != null)
                 {
@@ -131,6 +123,15 @@ namespace AudioNetwork.Services
 
             return null;
         }
+        public static void GetAndSavePictureByTag(Tag tag, string songCoverPath, string songId)
+        {
+            var ms = new MemoryStream(tag.Pictures[0].Data.Data);
+            var image = Image.FromStream(ms);
+            var pathSongAlbumCover = songCoverPath + songId + ".jpg";
+            image.Save(pathSongAlbumCover);
+        }
+
+       
 
 
     }

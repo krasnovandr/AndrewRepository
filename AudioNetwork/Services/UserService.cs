@@ -1,18 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using AudioNetwork.Helpers;
 using AudioNetwork.Models;
-using DataLayer.Models;
 using DataLayer.Repositories;
-using TagLib.Riff;
 
 namespace AudioNetwork.Services
 {
     public interface IUserService
     {
         IEnumerable<UserViewModel> SearchUsers(UserSearchModel searchModel, string userId);
+        List<UserViewModel> GetUsers(string userId);
+        UserViewModel GetUser(string id);
+        void UpdateUser(UserViewModel userInfo);
+        void UpdateUserVkInfo(string userId, string login, string password);
+        void UpdateUserCurrentSong(string userId, string songId);
+        void AddFriend(string userId, string id);
+        List<UserViewModel> GetFriends(string userId);
+        void RemoveFriend(string userId, string id);
+
     }
     public class UserService : IUserService
     {
@@ -89,23 +94,31 @@ namespace AudioNetwork.Services
             var user = ModelConverters.ToUserViewModel(_userRepository.GetUser(id));
             if (user != null)
             {
-
-                var song = _musicRepository.GetSong(user.SongAtThisMoment);
-                if (song != null)
-                {
-                    if (user.IsOnline == false)
-                    {
-                        user.CurrentSong = null;
-                    }
-                    else
-                    {
-                        user.CurrentSong = ModelConverters.ToSongViewModel(song);
-                    }
-                }
+                UpdateUserSong(user);
             }
 
             return user;
         }
+
+        private void UpdateUserSong(UserViewModel user)
+        {
+            if (user != null)
+            {
+                if (user.IsOnline == false)
+                {
+                    user.SongAtThisMoment = string.Empty;
+                    user.CurrentSong = null;
+                }
+
+                var song = _musicRepository.GetSong(user.SongAtThisMoment);
+                if (song != null)
+                {
+                    user.CurrentSong = ModelConverters.ToSongViewModel(song);
+                }
+
+            }
+        }
+
 
         public void UpdateUser(UserViewModel userInfo)
         {
@@ -128,7 +141,7 @@ namespace AudioNetwork.Services
             _userRepository.AddFriend(userId, id);
         }
 
-        public List<ApplicationUser> GetFriends(string userId)
+        public List<UserViewModel> GetFriends(string userId)
         {
 
             var friends = _userRepository.GetFriends(userId).ToList();
@@ -137,22 +150,10 @@ namespace AudioNetwork.Services
 
             foreach (var friend in resultList)
             {
-                var song = _musicRepository.GetSong(friend.SongAtThisMoment);
-                if (song != null)
-                {
-                    if (friend.LastActivity > DateTime.Now.AddMinutes(3))
-                    {
-                        friend.CurrentSong = null;
-                    }
-                    else
-                    {
-                        friend.CurrentSong = ModelConverters.ToSongViewModel(song);
-                    }
-                }
-
+                UpdateUserSong(friend);
             }
 
-            return friends;
+            return resultList;
         }
 
         public void RemoveFriend(string userId, string id)

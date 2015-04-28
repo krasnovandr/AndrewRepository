@@ -158,6 +158,7 @@ namespace DataLayer.Repositories
                     db.PlaylistItem.Add(newRecord);
                 }
             }
+            db.SaveChanges();
         }
 
         public void AddSongToUser(string songId, string userId)

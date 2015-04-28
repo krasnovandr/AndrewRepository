@@ -34,19 +34,19 @@
         }
 
 
-        public static string SongPathRelative
-        {
-            get
-            {
-                return "~/Content/Songs/";
-            }
-        }
+        //public static string SongPathRelative
+        //{
+        //    get
+        //    {
+        //        return "~/Content/Songs/";
+        //    }
+        //}
 
-        public static string ForSongPhysicalPath
+        public static string SongVirtualPath
         {
             get
             {
-                return "Content/Songs/";
+                return "/Content/Songs/";
             }
         }
 

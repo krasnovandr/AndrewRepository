@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using AudioNetwork.Models;
 using AudioNetwork.Services;
@@ -42,7 +43,7 @@ namespace AudioNetwork.Controllers
             return Json(null);
         }
 
-        public JsonResult UploadConversationImage(HttpPostedFileBase file, string conversationId, string formData)
+        public JsonResult UploadConversationImage(HttpPostedFileBase file, string conversationId)
         {
             if (file != null && file.ContentLength > 0)
             {
@@ -61,7 +62,7 @@ namespace AudioNetwork.Controllers
         {
             if (file != null && file.ContentLength > 0)
             {
-                var absoluteSongPath = Server.MapPath(FilePathContainer.SongPathRelative);
+                var absoluteSongPath = Server.MapPath(FilePathContainer.SongVirtualPath);
                 var absoluteSongCoverPath = Server.MapPath(FilePathContainer.SongAlbumCoverPathPhysical);
                 var userId = User.Identity.GetUserId();
 
@@ -75,10 +76,10 @@ namespace AudioNetwork.Controllers
                 _uploadService.UploadSong(fileExtension, fileName, pathSong, songId, absoluteSongCoverPath, userId);
             }
 
-            return RedirectToAction("GetUser", "Users");
+            return Json(new {Success = true});
         }
 
-        public JsonResult UploadSongVk(VkUserModel model)
+        public JsonResult GetSongsVk(VkUserModel model)
         {
             var userId = User.Identity.GetUserId();
             return Json(_uploadService.GetSongVk(userId, model), JsonRequestBehavior.AllowGet);

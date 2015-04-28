@@ -10,7 +10,10 @@ namespace AudioNetwork.Services
 {
     public interface IWallService
     {
-        
+        List<WallItemViewModel> GetWall(string userId);
+        WallItemViewModel GetWallItem(string userId, int wallItemId);
+        void AddWallItem(WallItemViewModel wallItemView);
+        void RemoveWallItem(string userId, int wallItemId);
     }
 
     public class WallService:IWallService

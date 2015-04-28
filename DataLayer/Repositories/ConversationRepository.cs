@@ -103,7 +103,7 @@ namespace DataLayer.Repositories
             }
         }
 
-        private static void AddPlaylistToConversation(ApplicationDbContext db, Conversation conversation)
+        private void AddPlaylistToConversation(ApplicationDbContext db, Conversation conversation)
         {
             var playlist = new Playlist
             {
@@ -112,8 +112,8 @@ namespace DataLayer.Repositories
                 PlaylistId = Guid.NewGuid().ToString(),
             };
 
-            db.Playlist.Add(playlist);
-            db.SaveChanges();
+            //db.Playlist.Add(playlist);
+            //db.SaveChanges();
             conversation.PlaylistId = playlist.PlaylistId;
         }
 
@@ -492,7 +492,6 @@ namespace DataLayer.Repositories
                 db.SaveChanges();
             }
         }
-
 
         public void UpdateConversationName(string conversationId, string conversationName)
         {

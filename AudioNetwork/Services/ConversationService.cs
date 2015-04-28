@@ -15,9 +15,18 @@ namespace AudioNetwork.Services
         SongViewModel GetConversationCurrentSong(Conversation conversation);
         List<SongViewModel> GetConversationSongs(ConversationViewModel conversation);
         void AddConversation(string userId, ConversationViewModel conversationModel);
+        ConversationViewModel AddOrGetDialog(string userId, string myId);
+        void RemoveConversation(string userId, ConversationViewModel conversationViewModel);
+        void AddMessageToConversation(string myId, string text, string conversationId, List<Song> songs);
+        void RemoveMessageFromConversation(string myId, string messageId, string conversationId);
+        void AddUserToConversation(string userId, string conversationId);
+        void RemoveUserFromConversation(string id, string conversationId);
+        int GetMyNotReadMessagesCount(string myId);
+        int ReadConversationMessages(string myId, string conversationId);
+        void UpdateConversationCurrentSong(string conversationId, string songId);
+        List<ConversationViewModel> GetMusicConversations(string userId);
         List<MessageViewModel> GetConversationMessages(ConversationViewModel conversationViewModel, string userId);
     }
-
     public class ConversationService : IConversationService
     {
         private readonly IMusicRepository _musicRepository;
@@ -52,11 +61,11 @@ namespace AudioNetwork.Services
         {
             var conversation = _conversationRepository.GetConversation(conversationId);
             var converView = ModelConverters.ToConversationViewModel(conversation);
-           
+
             converView.ConversationUsers = GetConversationPeople(conversation.ConversationId);
             converView.NotReadCount = _conversationRepository.GetConversationNotReadMessagesCount(userId,
                 conversation.ConversationId);
-            
+
             converView.CurrentSong = GetConversationCurrentSong(conversation);
             converView.ConversationSongs = GetConversationSongs(converView);
             return converView;
@@ -167,6 +176,27 @@ namespace AudioNetwork.Services
         public void UpdateConversationCurrentSong(string conversationId, string songId)
         {
             _conversationRepository.UpdateConversationCurrentSong(conversationId, songId);
+        }
+
+        public List<ConversationViewModel> GetMusicConversations(string userId)
+        {
+            var musicConversations = _conversationRepository.GetAllMusicConversations();
+            var ids = _conversationRepository.GetMyConversations(userId, 4).Select(m => m.ConversationId).ToList();
+            var result = new List<ConversationViewModel>();
+
+            foreach (var conversation in musicConversations)
+            {
+                var converView = GetConversation(userId, conversation.ConversationId);
+                if (ids.Contains(converView.ConversationId))
+                {
+                    converView.MyConversation = true;
+                }
+
+                result.Add(converView);
+            }
+
+            return result;
+
         }
     }
 }

@@ -244,6 +244,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DateTimeHelper.cs" />
+    <Compile Include="Helpers\MailSender.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Hubs\ConversationHub.cs" />
     <Compile Include="Models\ConversationViewModel.cs">
@@ -342,6 +343,7 @@
     <Content Include="Scripts\Libs\angular.min.js.map" />
     <Content Include="ClassDiagram1.cd" />
     <Content Include="Scripts\Libs\angular-sanitize.min.js.map" />
+    <Content Include="ClassDiagram2.cd" />
     <None Include="Properties\PublishProfiles\AudioNetworkTest.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -275,6 +275,26 @@
     <Compile Include="Migrations\201504011835081_UpdateListenedSongFields2.Designer.cs">
       <DependentUpon>201504011835081_UpdateListenedSongFields2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504121914518_AddTagtable.cs" />
+    <Compile Include="Migrations\201504121914518_AddTagtable.Designer.cs">
+      <DependentUpon>201504121914518_AddTagtable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504121916242_AddTagtable2.cs" />
+    <Compile Include="Migrations\201504121916242_AddTagtable2.Designer.cs">
+      <DependentUpon>201504121916242_AddTagtable2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504121917559_UpdateTagtable.cs" />
+    <Compile Include="Migrations\201504121917559_UpdateTagtable.Designer.cs">
+      <DependentUpon>201504121917559_UpdateTagtable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504251250135_Test.cs" />
+    <Compile Include="Migrations\201504251250135_Test.Designer.cs">
+      <DependentUpon>201504251250135_Test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504251309531_DeletePlaylistFromSong.cs" />
+    <Compile Include="Migrations\201504251309531_DeletePlaylistFromSong.Designer.cs">
+      <DependentUpon>201504251309531_DeletePlaylistFromSong.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -451,9 +471,25 @@
     <EmbeddedResource Include="Migrations\201504011835081_UpdateListenedSongFields2.resx">
       <DependentUpon>201504011835081_UpdateListenedSongFields2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504121914518_AddTagtable.resx">
+      <DependentUpon>201504121914518_AddTagtable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504121916242_AddTagtable2.resx">
+      <DependentUpon>201504121916242_AddTagtable2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504121917559_UpdateTagtable.resx">
+      <DependentUpon>201504121917559_UpdateTagtable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504251250135_Test.resx">
+      <DependentUpon>201504251250135_Test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504251309531_DeletePlaylistFromSong.resx">
+      <DependentUpon>201504251309531_DeletePlaylistFromSong.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

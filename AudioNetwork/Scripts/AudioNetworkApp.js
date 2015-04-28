@@ -188,7 +188,6 @@ var config = function ($routeProvider) {
           controller: 'RegisterController'
       }).when('/Home', {
           templateUrl: 'Users/Index',
-          controller: 'UsersController'
       }).when('/Upload', {
           templateUrl: 'Upload/Upload',
       }).when('/Player', {
@@ -196,10 +195,8 @@ var config = function ($routeProvider) {
           //controller: 'DownloadController'
       }).when('/Users', {
           templateUrl: 'Users/ViewUsers',
-          controller: 'UsersController'
       }).when('/Friends', {
           templateUrl: 'Users/ViewFriends',
-          controller: 'UsersController'
       }).when('/Users/:id', {
           templateUrl: function (params) { return 'Users/ViewUser?id=' + params.id; },
           controller: 'UsersController'
@@ -217,7 +214,6 @@ var config = function ($routeProvider) {
           templateUrl: 'Conversation/ViewEditConversations',
       }).when('/Playlists', {
           templateUrl: 'Playlist/Playlists',
-          controller: 'UsersController'
       }).when('/Music', {
           templateUrl: 'Music',
       }).when('/Statistics', {

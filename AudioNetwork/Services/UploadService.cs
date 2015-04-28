@@ -6,6 +6,8 @@ using System.Web;
 using AudioNetwork.Helpers;
 using AudioNetwork.Models;
 using DataLayer.Repositories;
+using LastFmServices;
+using TagLib;
 using VkService;
 using VkService.Models;
 using File = TagLib.File;
@@ -48,12 +50,12 @@ namespace AudioNetwork.Services
                 fileName = fileName.Replace("\\p{Cntrl}", "");
             }
 
-            var songPathToDb = FilePathContainer.ForSongPhysicalPath + songId + fileExtension;
+            var songPathToDb = FilePathContainer.SongVirtualPath + songId + fileExtension;
             var songAlbumPicturePathToDb = FilePathContainer.SongAlbumCoverPathRelative + songId + FilePathContainer.SongAlbumCoverFileFormat;
 
             string content = string.Empty;
 
-       
+
 
             var saveSongCoverPath = absoluteSongCoverPath;
             var audioFile = TagLib.File.Create(pathSong);
@@ -70,14 +72,24 @@ namespace AudioNetwork.Services
                 artistVk = songInfoFromVk.Title.ToUtf8();
             }
 
-            songAlbumPicturePathToDb = SongAlbumPicturePathToDb(audioFile, saveSongCoverPath, songId, songAlbumPicturePathToDb, titleFromVk, artistVk, fileName, ref content);
 
+            songAlbumPicturePathToDb = SongAlbumPicturePathToDb(audioFile, saveSongCoverPath, songId, songAlbumPicturePathToDb, titleFromVk, artistVk, fileName, ref content);
+            GetSongTags(audioFile.Tag, titleFromVk, artistVk);
             var song = ModelConverters.ToSongFromTagModel(audioFile, songId, songPathToDb, songAlbumPicturePathToDb, content, lyrics, fileName, songInfoFromVk);
 
             _musicRepository.AddSong(song, userId);
         }
 
-       
+        private void GetSongTags(Tag tag, string titleFromVk, string artistVk)
+        {
+            string artist = string.Empty;
+            string track = string.Empty;
+            var info = new AlbumTrackInfo();
+            var service = new LastFmService();
+            
+        }
+
+   
         public void SaveSongFromVkUpdatePicture(SongViewModel song, string userid)
         {
             var songInfo = SongPictureGetter.GetPictureByWebService(null, song.Title, song.Artist, "");
@@ -91,8 +103,6 @@ namespace AudioNetwork.Services
             _playlistRepository.AddToVkPlayList(userid, ModelConverters.ToSongModel(song));
         }
 
-
-
         public void UploadUserImage(string imagePath, string userId)
         {
             _userRepository.AddImage(imagePath, userId);
@@ -105,7 +115,7 @@ namespace AudioNetwork.Services
 
         public List<SongViewModel> GetSongVk(string userId, VkUserModel model)
         {
-            UserSongsGet get = new UserSongsGet(model.Login, model.Password);
+            VkSongInfoGetter get = new VkSongInfoGetter(model.Login, model.Password);
             var result = new List<SongViewModel>();
             var songs = get.GetSongs(model.FindLyrics).ToList();
             if (songs.Any())
@@ -121,7 +131,7 @@ namespace AudioNetwork.Services
         {
             var authorize = new VkAuthorization();
             var api = authorize.Authorize();
-            var songLyricsAndInfoGetter = new SongLyricsAndInfoGetter(api);
+            var songLyricsAndInfoGetter = new VkSongInfoGetter(api);
             var titleEncoded = audioFile.Tag.Title.ToUtf8();
             var artistEncoded = audioFile.Tag.Artists.ConvertStringArrayToString().ToUtf8();
 
@@ -150,7 +160,7 @@ namespace AudioNetwork.Services
         }
 
 
-        private static string SongAlbumPicturePathToDb(File audioFile, string saveSongCoverPath, string songId,
+        private string SongAlbumPicturePathToDb(File audioFile, string saveSongCoverPath, string songId,
             string songAlbumPicturePathToDb, string titleVk, string artistVk, string filename, ref string content)
         {
             if (audioFile.Tag.Pictures.Any())
@@ -171,6 +181,6 @@ namespace AudioNetwork.Services
         }
 
 
-      
+
     }
 }

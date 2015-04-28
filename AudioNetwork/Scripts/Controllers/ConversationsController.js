@@ -320,5 +320,24 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
         $scope.getCurrentConversationMessages();
         //$scope.getConversations();
     };
+    $scope.getAllMusicConversations = function () {
+        messagesService.getAllMusicConversations().success(function (openConversations) {
+            $scope.openConversations = openConversations;
+        });
+    };
+
+    $scope.startConversation = function (conversation) {
+        if (!conversation) {
+            return;
+        }
+        var data = {
+            userId: $rootScope.logState.Id,
+            conversationId: conversation.ConversationId
+        };
+        messagesService.addUserToConversation(data).success(function () {
+            $scope.previewConversationPeople(conversation);
+        });
+    };
+    $scope.getAllMusicConversations();
 });
 

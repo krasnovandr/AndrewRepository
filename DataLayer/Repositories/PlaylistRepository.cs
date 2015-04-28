@@ -13,12 +13,11 @@ namespace DataLayer.Repositories
         IEnumerable<Playlist> GetPlayLists(string userId);
         IEnumerable<Playlist> GetPlayLists();
         void AddPlayList(string userId, Playlist playListModel);
-        // void SaveCurrentPlaylist(string userId, Playlist playlistId, List<Song> playlistSongs);
         void SaveCurrentPlaylist(string userId, string playlistId, List<Song> playlistSongs);
-        //void AddVkPlayList(string userId);
         void AddToVkPlayList(string userid, Song songModel);
         bool RemoveSong(string songId, string playlistId);
     }
+ 
     public class PlaylistRepository : IPlaylistRepository
     {
         public IEnumerable<Song> GetSongs(string userId, string playListid)
@@ -72,7 +71,7 @@ namespace DataLayer.Repositories
                 {
                     var song = db.Songs.FirstOrDefault(m => m.SongId == songId);
                     songs.Add(song);
-                }
+               } 
             }
             return songs;
         }
@@ -109,65 +108,13 @@ namespace DataLayer.Repositories
             }
         }
 
-        //public void RemoveSong(string userId, string playListId, string songId)
-        //{
-        //    using (var db = new ApplicationDbContext())
-        //    {
-        //        var user = db.Users.FirstOrDefault(m => m.Id == userId);
-
-        //        if (user == null)
-        //        {
-        //            return;
-        //        }
-
-        //        var playList = user.Playlist.FirstOrDefault(m => m.PlaylistId == playListId);
-
-        //        if (playList != null)
-        //        {
-        //            var song = playList.PlaylistItem.FirstOrDefault(m => m.SongId == songId);
-        //            if (song != null)
-        //            {
-        //                playList.PlaylistItem.Remove(song);
-        //            }
-        //        }
-        //        db.SaveChanges();
-        //    }
-        //}
-
-        //public void AddSong(string songId, string userId, string playlistId)
-        //{
-        //    using (var db = new ApplicationDbContext())
-        //    {
-        //        var user = db.Users.FirstOrDefault(m => m.Id == userId);
-
-        //        if (user == null)
-        //        {
-        //            return;
-        //        }
-
-        //        var playList = user.Playlist.FirstOrDefault(m => m.PlaylistId == playlistId);
-
-        //        if (playList != null)
-        //        {
-        //            var song = playList.PlaylistItem.FirstOrDefault(m => m.SongId == songId);
-
-        //            if (song != null)
-        //            {
-        //                playList.PlaylistItem.Remove(song);
-        //            }
-        //        }
-
-        //        db.SaveChanges();
-        //    }
-        //}
-
         public IEnumerable<Playlist> GetPlayLists(string userId)
         {
             using (var db = new ApplicationDbContext())
             {
                 var user = db.Users.FirstOrDefault(m => m.Id == userId);
 
-                if (user != null)
+                if (user != null && user.Playlist != null)
                 {
                     return user.Playlist.OrderBy(m => m.AddDate); //Where(m=>m.PlaylistId != userId);
                 }
@@ -274,23 +221,6 @@ namespace DataLayer.Repositories
             };
             db.PlaylistItem.Add(newRecord);
         }
-
-        //public void AddPlayListToConversation(string conversationId, Playlist playListModel)
-        //{
-        //    using (var db = new ApplicationDbContext())
-        //    {
-        //        var conversation = db.Conversations.FirstOrDefault(m => m.ConversationId == conversationId);
-        //        playListModel.AddDate = DateTime.Now;
-        //        playListModel.PlaylistId = Guid.NewGuid().ToString();
-        //        db.Playlist.Add(playListModel);
-        //        if (user != null)
-        //        {
-        //            user.Playlist.Add(playListModel);
-        //        }
-
-        //        db.SaveChanges();
-        //    }
-        //}
 
         public void SaveCurrentPlaylist(string userId, string playlistId, List<Song> playlistSongs)
         {

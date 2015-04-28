@@ -4,27 +4,18 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace LastFmServices
 {
     public class AlbumTrackInfo
     {
-        public AlbumTrackInfo()
-        {
-            // Tracks = new List<string>();
-        }
         public string PicturePath { get; set; }
         public string Content { get; set; }
-        //public string ArtistName { get; set; }
-        //public string AlbumTiTle { get; set; }
-        //public string AlbumPosition { get; set; }
-        //public List<string> Tracks { get; set; }
     }
+
     public class LastFmService
     {
         private const string ApiKey = "b0a06a1bc3e9ccf58d6f5e75dda63452";
@@ -32,9 +23,11 @@ namespace LastFmServices
         private const string Secret = "025753cf449ff020ef1348f38f6af0a2";
         private const string SessionKey = "876866c283bbcb24666a970042855591 ";
         private const string mainUrl = "http://ws.audioscrobbler.com/2.0/?";
-        string methodTrackGetInfo = "method=track.getInfo";
-        string methodAlbumGetInfo = "method=album.getinfo";
-        string methodTrackSearch = "method=track.search";
+        private const string methodTrackGetInfo = "method=track.getInfo";
+        private const string methodAlbumGetInfo = "method=album.getinfo";
+        private const string methodTrackSearch = "method=track.search";
+        private string methodTrackGetTags = "method=track.getTags";
+        private string methodArtistGetTags = "method=artist.getTags";
 
         public string GetSessionKey()
         {
@@ -54,14 +47,14 @@ namespace LastFmServices
 
             string tmp = "api_key" + ApiKey + "methodauth.getSessiontoken" + token + Secret;
 
-            // хешируем это алгоритмом MD5 (думаю, у вас не будет проблем найти его в Интернете)
             string sig = CalculateMD5Hash(tmp);
 
             string url = "http://ws.audioscrobbler.com/2.0/?method=auth.getSession&token=" + token + "&api_key=" +
                          ApiKey + "&api_sig=" + sig;
-            HttpWebRequest sessionRequest =
-                (HttpWebRequest)WebRequest.Create(url);
+
+            var sessionRequest = (HttpWebRequest)WebRequest.Create(url);
             sessionRequest.AllowAutoRedirect = true;
+
             HttpWebResponse sessionResponse = null;
             try
             {
@@ -69,12 +62,17 @@ namespace LastFmServices
             }
             catch (Exception exception)
             {
-
+                return string.Empty;
 
             }
+            var responseStream = sessionResponse.GetResponseStream();
 
-            string sessionResult = new StreamReader(sessionResponse.GetResponseStream(),
-                                           Encoding.UTF8).ReadToEnd();
+            if (responseStream == null)
+            {
+                return string.Empty;
+            }
+
+            string sessionResult = new StreamReader(responseStream, Encoding.UTF8).ReadToEnd();
             string sessionKey = String.Empty;
             for (int i = sessionResult.IndexOf("<key>") + 5; i < sessionResult.IndexOf("</key>"); i++)
             {
@@ -82,18 +80,62 @@ namespace LastFmServices
             }
 
             return sessionKey;
+
         }
 
-        public void getArtistCorrection()
+        public List<string> GetTag(string artist)
+        {
+            var result = new List<string>();
+            string url = mainUrl + methodTrackGetTags + ApiKeyWithparam +
+               "&artist=" + artist + "&user=" + "RJ";
+
+            return GetTagsFromXml(url, result);
+        }
+        public List<string> GetTag(string artist, string track)
+        {
+            var result = new List<string>();
+            string url = mainUrl + methodTrackGetTags + ApiKeyWithparam +
+               "&artist=" + artist + "&track=" + track;
+
+            return GetTagsFromXml(url, result);
+        }
+
+        private List<string> GetTagsFromXml(string url, List<string> result)
+        {
+            XDocument xmlResult;
+            try
+            {
+                xmlResult = XDocument.Load((url));
+            }
+            catch (Exception exception)
+            {
+                return null;
+            }
+
+            if (xmlResult.Root != null)
+            {
+                var tags = xmlResult.Root.Elements("tags").ToList();
+
+                foreach (var tag in tags)
+                {
+                    if (tag.Element("name") != null)
+                    {
+                        result.Add(tag.Value);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public void GetArtistCorrection()
         {
             string method = "method=artist.getcorrection&artist=";
             string url = mainUrl + method + "Pink" + ApiKeyWithparam;
             XDocument xDoc = XDocument.Load((url));
-
-
         }
 
-        public AlbumTrackInfo getAlbumInfo(string artist, string album)
+        public AlbumTrackInfo GetAlbumInfo(string artist, string album)
         {
             string url = mainUrl + methodAlbumGetInfo + ApiKeyWithparam +
                 "&artist=" + artist + "&album=" + album + "&lang=ru";
@@ -116,8 +158,8 @@ namespace LastFmServices
                 var albumElement = trackElement.Elements("album").ToList();
 
                 var image = trackElement.Elements("image").FirstOrDefault(m => (string)m.Attribute("size") == "large");
-                
-                
+
+
                 if (image != null)
                 {
                     albumInfo.PicturePath = image.Value;
@@ -150,7 +192,7 @@ namespace LastFmServices
 
         }
 
-        public AlbumTrackInfo getTrackInfo(string artist, string track)
+        public AlbumTrackInfo GetTrackInfo(string artist, string track)
         {
             string url = mainUrl + methodTrackGetInfo + ApiKeyWithparam +
                 "&artist=" + artist + "&track=" + track;
@@ -209,7 +251,7 @@ namespace LastFmServices
         }
 
 
-        public AlbumTrackInfo searchTrackInfo(string track)
+        public AlbumTrackInfo SearchTrackInfo(string track)
         {
             string url = mainUrl + methodTrackSearch +
                 "&track=" + track + ApiKeyWithparam + "&limit=1";
@@ -245,7 +287,7 @@ namespace LastFmServices
 
                     if (artistName != null && string.IsNullOrEmpty(artistName.Value) == false)
                     {
-                        return  getTrackInfo(artistName.Value, track);
+                        return GetTrackInfo(artistName.Value, track);
                     }
                 }
 
