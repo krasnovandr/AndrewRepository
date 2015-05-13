@@ -107,6 +107,14 @@ namespace AudioNetwork.Controllers
             return Json(null);
         }
 
+        public ActionResult ConfirmFriend(UserViewModel friend)
+        {
+            var userId = User.Identity.GetUserId();
+            _userService.ConfirmFriend(userId, friend.Id);
+
+            return Json(null);
+        }
+        
         public ActionResult RemoveFriend(UserViewModel friend)
         {
             var userId = User.Identity.GetUserId();
@@ -121,9 +129,23 @@ namespace AudioNetwork.Controllers
             return Json(_userService.GetFriends(userId), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetIncomingRequests()
+        {
+            var userId = User.Identity.GetUserId();
+            return Json(_userService.GetIncomingRequests(userId), JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetOutgoingRequests()
+        {
+            var userId = User.Identity.GetUserId();
+            return Json(_userService.GetOutgoingRequests(userId), JsonRequestBehavior.AllowGet);
+        }
+
+
         public ActionResult GetUserFriends(string id)
         {
             return Json(_userService.GetFriends(id), JsonRequestBehavior.AllowGet);
         }
+
+        
     }
 }

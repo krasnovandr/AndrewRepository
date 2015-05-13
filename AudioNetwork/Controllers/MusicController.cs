@@ -75,5 +75,16 @@ namespace AudioNetwork.Controllers
             _musicService.ListenedSong(songId, userId);
             return Json(null, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult DownloadSong(string songId)
+        {
+            var userid = User.Identity.GetUserId();
+            //foreach (var song in songs)
+            //{
+            var song = _musicService.GetSong(songId);
+            var songPath = Server.MapPath(song.SongPath);
+            //}
+            return File(song.SongPath, "application/force-download", song.Artist + song.Title);
+        }
     }
 }

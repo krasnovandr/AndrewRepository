@@ -61,6 +61,9 @@ namespace AudioNetwork.Models
         public string ConfirmPassword { get; set; }
         [Required]
         public string Email { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 
     public class LoginResult
@@ -68,5 +71,6 @@ namespace AudioNetwork.Models
         public bool Success { get; set; }
         public bool EmailSended { get; set; }
         public string Message { get; set; }
+        public bool EmailNotConfirmed { get; set; }
     }
 }

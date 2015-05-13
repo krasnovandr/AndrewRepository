@@ -47,7 +47,6 @@ namespace DataLayer.Repositories
                 {
                     case 1:
                         conversations.AddRange(userConversations);
-                        //conversations.AddRange(db.Conversations);
                         break;
                     case 2: conversations.AddRange(userConversations.Where(m => m.IsDialog == false && m.MusicConversation == false));
                         break;
@@ -112,8 +111,8 @@ namespace DataLayer.Repositories
                 PlaylistId = Guid.NewGuid().ToString(),
             };
 
-            //db.Playlist.Add(playlist);
-            //db.SaveChanges();
+            db.Playlist.Add(playlist);
+            db.SaveChanges();
             conversation.PlaylistId = playlist.PlaylistId;
         }
 
@@ -126,7 +125,7 @@ namespace DataLayer.Repositories
                 var me = db.Users.FirstOrDefault(m => m.Id == myId);
                 if (me != null)
                 {
-                    var conversationExists = GetUserConversation(db, userId, myId + userId,myId);
+                    var conversationExists = GetUserConversation(db, userId, myId + userId, myId);
 
                     if (conversationExists != null)
                     {
@@ -148,15 +147,9 @@ namespace DataLayer.Repositories
                         db.Conversations.Add(conversation);
                         AddPlaylistToConversation(db, conversation);
                         db.SaveChanges();
-                        //db.Conversations.Attach(conversation);
                         AddUserToConversation(userId, conversation.ConversationId);
                         AddUserToConversation(myId, conversation.ConversationId);
-                        // me.Conversations.Add(conversation);
-                        //  db.SaveChanges();
-
                     }
-
-                    //    user.Conversations.Add(conversation);
                 }
 
             }
@@ -175,11 +168,9 @@ namespace DataLayer.Repositories
                     if (conversationUsers.Count > 1)
                     {
                         RemoveUserFromConversation(userId, conversation.ConversationId);
-                        //user.Conversations.Remove(conversationToRemove);
                     }
                     else
                     {
-                        //user.Conversations.Remove(conversationToRemove);
                         RemoveUserFromConversation(userId, conversation.ConversationId);
                         db.Conversations.Remove(conversationToRemove);
                     }
@@ -227,7 +218,6 @@ namespace DataLayer.Repositories
                     var conversation = db.Conversations.FirstOrDefault(m => m.ConversationId == conversationId);
                     if (conversation != null)
                     {
-                        // user.Conversations.Remove(conversation);
                         var userConv = db.UserConversations.Where(m => m.ConversationId == conversationId);
                         var removeRecord = userConv.FirstOrDefault(m => m.UserId == userId);
                         if (removeRecord != null)
@@ -272,7 +262,6 @@ namespace DataLayer.Repositories
 
                 if (user != null)
                 {
-                    //  var myConversations = GetUserConversations(user.Id);//(m => m.ConversationId == conversationModel.ConversationId);
                     var conversationsId = db.UserConversations.Where(m => m.UserId == user.Id).Select(m => m.ConversationId);
 
                     var myConversations = new List<Conversation>();
@@ -350,16 +339,6 @@ namespace DataLayer.Repositories
 
                 if (conversation != null && user != null)
                 {
-                    //var message = new Message
-                    //{
-                    //    MessageId = Guid.NewGuid().ToString(),
-                    //    FromId = myId,
-                    //    FromName = user.UserName,
-                    //    AddDate = DateTime.Now,
-                    //    FromAvatarPath = user.AvatarFilePath,
-                    //    Text = text
-                    //};
-
                     var message = conversation.Messages.FirstOrDefault(m => m.MessageId == messageId);
 
                     if (message != null)
@@ -367,20 +346,7 @@ namespace DataLayer.Repositories
                         conversation.Messages.Remove(message);
                     }
 
-                    //var convUsers = GetConversationUsers(conversation.ConversationId);
-                    //foreach (var conversationUser in convUsers)
-                    //{
-                    //    if (conversationUser.Id != myId)
-                    //    {
-                    //        var newMessage = new NotReadMessage
-                    //        {
-                    //            IdUser = conversationUser.Id,
-                    //            RecordId = Guid.NewGuid().ToString(),
-                    //            MessageId = message.MessageId,
-                    //        };
-                    //        conversation.NotReadMessages.Add(newMessage);
-                    //    }
-                    //}
+
                 }
 
                 db.SaveChanges();
@@ -468,7 +434,7 @@ namespace DataLayer.Repositories
             using (var db = new ApplicationDbContext())
             {
                 var conversation = db.Conversations.FirstOrDefault(m => m.ConversationId == conversationId);
-                // var song = db.Songs.FirstOrDefault(m => m.SongId == songId);
+
                 if (conversation != null)
                 {
                     conversation.ConversationAvatarFilePath = imagePath;
@@ -483,7 +449,7 @@ namespace DataLayer.Repositories
             using (var db = new ApplicationDbContext())
             {
                 var conversation = db.Conversations.FirstOrDefault(m => m.ConversationId == conversationId);
-                // var song = db.Songs.FirstOrDefault(m => m.SongId == songId);
+
                 if (conversation != null)
                 {
                     conversation.SongAtThisMoment = songId;
@@ -498,7 +464,7 @@ namespace DataLayer.Repositories
             using (var db = new ApplicationDbContext())
             {
                 var conversation = db.Conversations.FirstOrDefault(m => m.ConversationId == conversationId);
-                // var song = db.Songs.FirstOrDefault(m => m.SongId == songId);
+
                 if (conversation != null)
                 {
                     conversation.Name = conversationName;
@@ -517,7 +483,7 @@ namespace DataLayer.Repositories
         }
 
         public IEnumerable<Conversation> GetUserConversations(ApplicationDbContext db, string userId)
-        {          // var songsId = db.PlaylistItem.Where(m => m.PlaylistId == playListid).OrderBy(m => m.TrackPos).Select(m => m.SongId).ToList();
+        {
             var conversations = new List<Conversation>();
             var conversationsId = db.UserConversations.Where(m => m.UserId == userId).Select(m => m.ConversationId);
 
@@ -532,7 +498,7 @@ namespace DataLayer.Repositories
         }
 
         public IEnumerable<ApplicationUser> GetConversationUsers(ApplicationDbContext db, string conversationId)
-        {          // var songsId = db.PlaylistItem.Where(m => m.PlaylistId == playListid).OrderBy(m => m.TrackPos).Select(m => m.SongId).ToList();
+        {
             var users = new List<ApplicationUser>();
             var usersId = db.UserConversations.Where(m => m.ConversationId == conversationId).Select(m => m.UserId);
 
@@ -547,12 +513,11 @@ namespace DataLayer.Repositories
         }
 
         public IEnumerable<ApplicationUser> GetConversationUsers(string conversationId)
-        {          // var songsId = db.PlaylistItem.Where(m => m.PlaylistId == playListid).OrderBy(m => m.TrackPos).Select(m => m.SongId).ToList();
+        {
             var users = new List<ApplicationUser>();
             using (var db = new ApplicationDbContext())
             {
                 var usersId = db.UserConversations.Where(m => m.ConversationId == conversationId).Select(m => m.UserId);
-
 
                 foreach (var id in usersId)
                 {
@@ -565,8 +530,8 @@ namespace DataLayer.Repositories
         }
 
         public Conversation GetUserConversation(ApplicationDbContext db, string userId, string conversationId, string myId)
-        {          // var songsId = db.PlaylistItem.Where(m => m.PlaylistId == playListid).OrderBy(m => m.TrackPos).Select(m => m.SongId).ToList();
-            var conversation = new Conversation();
+        {
+            Conversation conversation;
             var conversationsId = db.UserConversations.Where(m => m.UserId == myId).Select(m => m.ConversationId);
             var exist = conversationsId.Contains(conversationId);
 
@@ -579,7 +544,7 @@ namespace DataLayer.Repositories
                 var findConversation = db.Conversations.FirstOrDefault(m => m.ConversationId == conversationId);
                 if (findConversation != null)
                 {
-                    AddUserToConversation(myId,findConversation.ConversationId);
+                    AddUserToConversation(myId, findConversation.ConversationId);
                     return findConversation;
                 }
                 return null;

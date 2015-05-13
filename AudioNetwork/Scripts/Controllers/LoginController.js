@@ -29,6 +29,7 @@
 
             } else {
                 $scope.loginError = answer.Message;
+                $scope.errorMail = answer.EmailNotConfirmed;
             }
         });
     };
@@ -45,12 +46,20 @@
                 //$rootScope.logState.UserName = answer.UserName;
                 //$rootScope.logState.LoggedIn = answer.LoggedIn;
                 //$rootScope.logState.Id = answer.Id;
-                $rootScope.logState =answer;
+                $rootScope.logState = answer;
             } else {
             }
         });
     }
 
+    $scope.repeatMail = function () {
+        var data = {
+            userName: $scope.userName
+        };
+        authorizationService.repeatMail(data).success(function (answer) {
+
+        });
+    };
 
     checkLogin();
     $scope.getexternalProviders = function () {
@@ -62,7 +71,7 @@
     $scope.externalAuthentification = function (provider) {
         var data = {
             provider: provider.AuthenticationType,
-            returnUrl:'http://localhost:38114/signin-vkontakte'
+            returnUrl: 'http://localhost:38114/signin-vkontakte'
         };
         authorizationService.externalAuthentification(data).success(function (providers) {
         });

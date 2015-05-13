@@ -49,7 +49,7 @@ namespace AudioNetwork.Controllers
                 {
                     if (user.EmailConfirmed == false)
                     {
-                        return Json(new LoginResult { Success = false, Message = "Регистрация по почте не подтверждена" });
+                        return Json(new LoginResult { EmailNotConfirmed = true, Message = "Регистрация по почте не подтверждена" });
                     }
                     await SignInAsync(user, model.RememberMe);
                     return Json(new LoginResult { Success = true });
@@ -86,7 +86,9 @@ namespace AudioNetwork.Controllers
                     LastActivity = DateTime.Now,
                     Email = model.Email,
                     AvatarFilePath = FilePathContainer.ImagePathRelative + "DefaultAvatar.png",
-                    EmailConfirmed = false
+                    EmailConfirmed = false,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
                 };
                 try
                 {
@@ -106,6 +108,17 @@ namespace AudioNetwork.Controllers
                 }
             }
             return Json(new LoginResult { Success = false, Message = ModelState.Values.ToString() });
+        }
+
+        [AllowAnonymous]
+        public async Task<JsonResult> RepeatMail(string userName)
+        {
+            ApplicationUser user = this.UserManager.FindByName(userName);
+            if (user != null && Request.Url != null)
+            {
+                MailSender.SendEmailMessage(user, Request.Url.Authority);
+            }
+            return Json(new { Success = false, Message = "Такой пользователь не найден" });
         }
 
     

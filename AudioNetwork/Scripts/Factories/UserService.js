@@ -8,6 +8,14 @@
             return $http.get('Users/GetFriends');
         },
 
+        getIncomingRequests: function () {
+            return $http.get('Users/GetIncomingRequests');
+        },
+
+        getOutgoingRequests: function () {
+            return $http.get('Users/GetOutgoingRequests');
+        },
+
         getUser: function (id) {
             return $http({ method: 'POST', url: 'Users/GetUser', data: id });
         },
@@ -29,6 +37,12 @@
             return $http({ method: 'POST', url: 'Users/AddFriend', data: friend });
             //return $http.get('Users/AddFriend');
         },
+        
+        confirmFriend: function (friend) {
+            return $http({ method: 'POST', url: 'Users/ConfirmFriend', data: friend });
+            //return $http.get('Users/AddFriend');
+        },
+        
         removeFriend: function (playlist) {
             return $http({ method: 'POST', url: 'Users/RemoveFriend', data: playlist });
         },

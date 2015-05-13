@@ -1,19 +1,26 @@
 ﻿<div ng-controller="PlaylistsController">
     <div class="col-md-2">
         <div>
-
-
+            <span class="text-info">Мои плейлисты</span>
             <button ng-hide="isNewPlaylist" ng-click="isNewPlaylist=true"><span class="glyphicon-plus"></span></button>
-            <button draggable ng-show="isNewPlaylist" ng-click="addPlaylist()">Добавить</button>
+            <button ng-show="isNewPlaylist" ng-click="addPlaylist()">Добавить</button>
+            <button ng-show="isNewPlaylist" ng-click="isNewPlaylist=false;newPlaylistName=''">Отменить</button>
             <input required type="text" ng-show="isNewPlaylist" class="form-control" ng-model="newPlaylistName">
         </div>
-        <div ng-repeat="playlist in playLists">
-            <a ng-click="previewPlaylist(playlist)" class="btn-info"> {{playlist.PlayListName}}</a>
-            <button class="btn-default" ng-click="removePlaylist(playlist)">
-                <span ng-hide="playlist.DefaultPlaylist==true" class="glyphicon glyphicon-remove"></span>
-            </button>
-        </div>
-        <button class="btn-default pull-right" ng-click="savePlaylist(currentPlayList,currentPlayListSongs)">
+        <table class="table">
+            <tr ng-repeat="playlist in playLists">
+                <td>
+                    <button ng-click="previewPlaylist(playlist)" class="btn-info"> {{playlist.PlayListName}}</button>
+                    
+                </td>
+                <td>
+                    <button class="btn-default" ng-click="removePlaylist(playlist)" ng-hide="playlist.DefaultPlaylist==true">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>  
+                </td>
+            </tr>
+        </table>
+        <button class="btn-success pull-right" ng-click="savePlaylist(currentPlayList,currentPlayListSongs)">
             <span class="glyphicon glyphicon-list">Сохранить плэйлист</span>
         </button>
     </div>

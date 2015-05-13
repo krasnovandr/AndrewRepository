@@ -26,6 +26,9 @@
         confirmRegistration: function (confirmData) {
             return $http({ method: 'POST', url: 'Account/ConfirmEmail', data: confirmData });
         },
+        repeatMail: function (confirmData) {
+            return $http({ method: 'POST', url: 'Account/RepeatMail', data: confirmData });
+        },
      
 
         //removeWallItem: function (wallItem) {

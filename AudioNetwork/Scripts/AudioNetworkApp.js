@@ -220,7 +220,7 @@ var config = function ($routeProvider) {
           templateUrl: 'Statistics/ViewStatistics',
       }).
        otherwise({
-           redirectTo: '/Home'
+           redirectTo: '/Login'
        });
 };
 

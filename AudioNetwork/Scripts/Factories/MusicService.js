@@ -42,6 +42,10 @@
         addToMyMusic: function (song) {
             return $http({ method: 'POST', url: 'Music/AddToMyMusic', data: song });
         },
+        downloadSong: function (song) {
+            return $http({ method: 'POST', url: 'Music/DownloadSong', data: song });
+        },
+
         listenedSong: function (song) {
             return $http({ method: 'POST', url: 'Music/ListenedSong', data: song });
         },

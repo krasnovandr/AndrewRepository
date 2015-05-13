@@ -19,7 +19,10 @@ namespace DataLayer.Repositories
         void RemoveFriend(string userId, string friendId);
         IEnumerable<ApplicationUser> GetFriends(string userId);
         void UpdateUserCurrentSong(string userId, string songId);
-        void UpdateUserVkInfo(string userId,string login, string password);
+        void UpdateUserVkInfo(string userId, string login, string password);
+        IEnumerable<ApplicationUser> GetOutgoingRequests(string userId);
+        IEnumerable<ApplicationUser> GetIncomingRequests(string userId);
+        void ConfirmFriend(string userId, string friendId);
     }
 
     public class UserRepository : IUserRepository
@@ -28,7 +31,7 @@ namespace DataLayer.Repositories
         {
             using (var db = new ApplicationDbContext())
             {
-                var friendsId = db.Friends.Where(m => m.Id == userId).Select(m => m.FriendId).ToList();
+                var friendsId = db.Friends.Where(m => m.UserId == userId).Select(m => m.FriendId).ToList();
                 friendsId.Add(userId);
                 var users = db.Users.Where(m => friendsId.Contains(m.Id) == false).ToList();
 
@@ -87,7 +90,7 @@ namespace DataLayer.Repositories
                     user.Country = userInfo.Country;
                     user.FirstName = userInfo.FirstName;
                     user.LastName = userInfo.LastName;
-                    user.BirthDate = userInfo.BirthDate;
+                    user.BirthDate = userInfo.BirthDate ?? DateTime.Now;
                     user.LastEntrenchedSong = userInfo.LastEntrenchedSong;
                     user.WorstGenre = userInfo.WorstGenre;
                     //user.BestAtrists = userInfo.BestAtrists;
@@ -103,7 +106,7 @@ namespace DataLayer.Repositories
             {
                 var friend = new Friend
                 {
-                    Id = userId,
+                    UserId = userId,
                     AddDate = DateTime.Now,
                     FriendId = friendId,
                     RecordId = Guid.NewGuid().ToString()
@@ -115,31 +118,93 @@ namespace DataLayer.Repositories
 
         }
 
+        public void ConfirmFriend(string userId, string friendId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+
+                var record = db.Friends.FirstOrDefault(m => m.UserId == friendId && m.FriendId == userId);
+                if (record != null)
+                {
+                    record.Confirmed = true;
+                    db.SaveChanges();
+
+                    var friend = new Friend
+                    {
+                        UserId = userId,
+                        AddDate = DateTime.Now,
+                        FriendId = friendId,
+                        RecordId = Guid.NewGuid().ToString(),
+                        Confirmed = true
+                    };
+                    db.Friends.Add(friend);
+                    db.SaveChanges();
+                }
+            }
+        }
+
         public void RemoveFriend(string userId, string friendId)
         {
             using (var db = new ApplicationDbContext())
             {
 
-                var friend = db.Friends.FirstOrDefault(m => m.Id == userId && m.FriendId == friendId);
+                var userFriend = db.Friends.FirstOrDefault(m => m.UserId == userId && m.FriendId == friendId);
 
-                if (friend != null)
+                if (userFriend != null)
                 {
-                    db.Friends.Remove(friend);
+                    db.Friends.Remove(userFriend);
+                }
+
+                var friendUser = db.Friends.FirstOrDefault(m => m.UserId == friendId && m.FriendId == userId);
+
+                if (friendUser != null)
+                {
+                    db.Friends.Remove(friendUser);
                 }
 
                 db.SaveChanges();
             }
         }
 
+        public IEnumerable<ApplicationUser> GetOutgoingRequests(string userId)
+        {
+            var friends = new List<ApplicationUser>();
+            using (var db = new ApplicationDbContext())
+            {
+                var friendsId = db.Friends.Where(m => m.UserId == userId && m.Confirmed== false).Select(m => m.FriendId);
+
+                foreach (var friendId in friendsId)
+                {
+                    var friend = db.Users.FirstOrDefault(m => m.Id == friendId);
+                    friends.Add(friend);
+                }
+            }
+            return friends;
+        }
+
+        public IEnumerable<ApplicationUser> GetIncomingRequests(string userId)
+        {
+            var friends = new List<ApplicationUser>();
+            using (var db = new ApplicationDbContext())
+            {
+                var friendsId = db.Friends.Where(m => m.FriendId == userId && m.Confirmed == false).Select(m => m.UserId);
+
+                foreach (var friendId in friendsId)
+                {
+                    var friend = db.Users.FirstOrDefault(m => m.Id == friendId);
+                    friends.Add(friend);
+                }
+            }
+            return friends;
+        }
+
+
         public IEnumerable<ApplicationUser> GetFriends(string userId)
         {
             var friends = new List<ApplicationUser>();
             using (var db = new ApplicationDbContext())
             {
-                var friendsId = db.Friends.Where(m => m.Id == userId).Select(m => m.FriendId);
-
-
-                // var songsId = db.PlaylistItem.Where(m => m.PlaylistId == playListid).OrderBy(m => m.TrackPos).Select(m => m.SongId).ToList();
+                var friendsId = db.Friends.Where(m => m.UserId == userId && m.Confirmed).Select(m => m.FriendId);
 
                 foreach (var friendId in friendsId)
                 {
@@ -155,7 +220,7 @@ namespace DataLayer.Repositories
             using (var db = new ApplicationDbContext())
             {
                 var user = db.Users.FirstOrDefault(m => m.Id == userId);
-               // var song = db.Songs.FirstOrDefault(m => m.SongId == songId);
+                // var song = db.Songs.FirstOrDefault(m => m.SongId == songId);
                 if (user != null)
                 {
                     user.SongAtThisMoment = songId;

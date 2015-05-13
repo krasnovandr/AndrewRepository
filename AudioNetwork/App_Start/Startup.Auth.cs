@@ -20,6 +20,7 @@ namespace AudioNetwork
                 LoginPath = new PathString("/Account/Login"),
                 //ExpireTimeSpan = new TimeSpan(1,0,0,0),
                 CookieName = "AuthCoockie",
+             //   ExpireTimeSpan = new TimeSpan(1)
                 //CookieSecure = CookieSecureOption.Always,
                 
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using AudioNetwork.Helpers;
 using AudioNetwork.Models;
+using DataLayer.Models;
 using DataLayer.Repositories;
 
 namespace AudioNetwork.Services
@@ -18,6 +19,10 @@ namespace AudioNetwork.Services
         List<UserViewModel> GetFriends(string userId);
         void RemoveFriend(string userId, string id);
 
+        //    List<UserViewModel> GetNotConfirmedFriends(string userId);
+        List<UserViewModel> GetIncomingRequests(string userId);
+        List<UserViewModel> GetOutgoingRequests(string userId);
+        void ConfirmFriend(string userId, string id);
     }
     public class UserService : IUserService
     {
@@ -143,8 +148,12 @@ namespace AudioNetwork.Services
 
         public List<UserViewModel> GetFriends(string userId)
         {
-
             var friends = _userRepository.GetFriends(userId).ToList();
+            return GetUserViewModels(friends);
+        }
+
+        private List<UserViewModel> GetUserViewModels(IEnumerable<ApplicationUser> friends)
+        {
             var resultList = new List<UserViewModel>();
             resultList.AddRange(friends.Select(ModelConverters.ToUserViewModel));
 
@@ -160,5 +169,25 @@ namespace AudioNetwork.Services
         {
             _userRepository.RemoveFriend(userId, id);
         }
+
+        public List<UserViewModel> GetIncomingRequests(string userId)
+        {
+            var notConfirmedfriends = _userRepository.GetIncomingRequests(userId);
+            return GetUserViewModels(notConfirmedfriends);
+        }
+
+        public List<UserViewModel> GetOutgoingRequests(string userId)
+        {
+            var notConfirmedfriends = _userRepository.GetOutgoingRequests(userId);
+            return GetUserViewModels(notConfirmedfriends);
+        }
+
+        public void ConfirmFriend(string userId, string id)
+        {
+            _userRepository.ConfirmFriend(userId,id);
+        }
+
+        //incoming requests
+        //outgoing requests
     }
 }

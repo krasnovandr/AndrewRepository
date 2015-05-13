@@ -20,7 +20,7 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
         { Title: 'Все', ConversationType: 1 },
     { Title: 'Беседы', ConversationType: 2 },
     { Title: 'Диалоги', ConversationType: 3 },
-    { Title: 'Музыкальные', ConversationType: 4 }];
+    { Title: 'Открытые', ConversationType: 4 }];
 
 
 

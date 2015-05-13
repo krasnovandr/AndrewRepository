@@ -94,6 +94,21 @@ controller('PlayerController', function ($scope, $http, $location, $rootScope, m
         });
     };
 
+    $rootScope.downloadSong = function (song) {
+       // window.open(song.SongPath, '_blank', '');
+        var ifr = document.createElement('iframe');
+        ifr.style.display = 'none';
+        document.body.appendChild(ifr);
+        ifr.src = document.location.pathname + "Music/DownloadSong?songId=" + song.SongId;
+        ifr.onload = function () {
+            document.body.removeChild(ifr);
+            ifr = null;
+        };
+        //musicService.downloadSong(song).success(function (result) {
+        //    //$scope.getMyMusic();
+        //});
+    };
+    
     $rootScope.getMyPlayLists = function () {
         musicService.getMyPlaylists().success(function (playLists) {
             $scope.playLists = playLists;

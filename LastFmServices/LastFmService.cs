@@ -43,8 +43,6 @@ namespace LastFmServices
                 token += tokenResult[i];
             }
 
-            Process s = Process.Start("http://www.last.fm/api/auth/?api_key=" + ApiKey + "&token=" + token);
-
             string tmp = "api_key" + ApiKey + "methodauth.getSessiontoken" + token + Secret;
 
             string sig = CalculateMD5Hash(tmp);

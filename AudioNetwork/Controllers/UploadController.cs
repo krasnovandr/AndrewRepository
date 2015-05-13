@@ -14,13 +14,15 @@ namespace AudioNetwork.Controllers
     {
         private readonly IUploadService _uploadService;
         private readonly IPlaylistService _playlistService;
+        private readonly IMusicService _musicService;
 
         public UploadController(
             IUploadService uploadService,
-          IPlaylistService playlistService)
+          IPlaylistService playlistService, IMusicService musicService)
         {
             _uploadService = uploadService;
             _playlistService = playlistService;
+            _musicService = musicService;
         }
 
         public ActionResult Upload()
@@ -76,7 +78,7 @@ namespace AudioNetwork.Controllers
                 _uploadService.UploadSong(fileExtension, fileName, pathSong, songId, absoluteSongCoverPath, userId);
             }
 
-            return Json(new {Success = true});
+            return Json(new { Success = true });
         }
 
         public JsonResult GetSongsVk(VkUserModel model)
@@ -110,5 +112,7 @@ namespace AudioNetwork.Controllers
             }
             return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
         }
+
+
     }
 }

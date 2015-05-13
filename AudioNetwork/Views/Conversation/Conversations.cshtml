@@ -7,24 +7,37 @@
                 <input type="text" placeholder="Навзание беседы" ng-model="conversationTitle" class=" form-control" id="conversationSearch">
                 <label for="conversationSearch" class="glyphicon glyphicon-search" rel="tooltip" title="email"></label>
             </div>
-            <div ng-repeat="conversation in conversations | filter:conversationTitle">
-                <div class="row" ng-click="changeConversationAndRead(conversation)">
-                    <div class="col-md-4">
+            <table class="table">
+                <tr>
+                    <th>Беседа</th>
+                    <th>Участников</th>
+                    <th>Непрочитано</th>
+                    <th>Последнее сообщение</th>
+                    <th>Сейчас играет:</th>
+                </tr>
+                <tr ng-repeat="conversation in conversations | filter:conversationTitle" ng-click="changeConversationAndRead(conversation)">
+                    <td>
                         <img class="pull-left" ng-src="{{conversation.ConversationAvatarFilePath}}" width="50" height="50" />
-                        <span class="badge">{{conversation.NotReadCount}}</span><a class="btn btn-link" href="/#/Conversations/{{conversation.ConversationId}}"> {{conversation.Name}}</a>
-                    </div>
-                    <div class="col-md-3">
-                        <span>Участников<span class="badge">{{conversation.ConversationUsers.length}}</span></span>
-                        <span>Последнее сообщение{{conversation.LastMessageDateWithFormat}}</span><br />
-                    </div>
-                    <div class="col-md-4">
-                        <span>Сейчас играет:</span>
+                        <a class="btn btn-link" href="/#/Conversations/{{conversation.ConversationId}}"> {{conversation.Name}}</a>
+                    </td>
+                    <td>
+                        <span><span class="badge">{{conversation.ConversationUsers.length}}</span></span>
+                    </td>
+                    <td>
+                        <span><span class="badge">{{conversation.NotReadCount}}</span></span>
+                    </td>
+                    <td>
+                        <span>{{conversation.LastMessageDateWithFormat}}</span><br />
+                    </td>
+                    <td>
                         <a href="/#/Songs/{{conversation.CurrentSong.SongId}} ">
                             <span>{{conversation.CurrentSong.Artist}} - {{conversation.CurrentSong.Title}}</span>
                         </a>
-                    </div>
-                </div>
-            </div>
+                    </td>
+                </tr>
+
+            </table>
+
         </div>
         <div class="col-md-5">
             <span>Открытые беседы</span>

@@ -9,6 +9,8 @@
         $scope.emailSend = false;
         $scope.confirmed = false;
         $scope.confirmedError = '';
+        $scope.firstName = '';
+        $scope.lastName = '';
 
         $scope.register = function () {
             var registerData =
@@ -16,7 +18,9 @@
                 UserName: $scope.userName,
                 Password: $scope.password,
                 ConfirmPassword: $scope.confirmPassword,
-                Email: $scope.email
+                Email: $scope.email,
+                FirstName: $scope.firstName,
+                LastName: $scope.lastName
             };
             authorizationService.register(registerData).success(function (answer) {
                 if (answer.Success) {

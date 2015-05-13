@@ -18,33 +18,39 @@
             </div>
         </div>
         <div class="row">
-            <div ng-repeat="user in users">
-                <div class="col-md-4 thumbnail">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <a href="/#/Users/{{user.Id}} ">
-                                <img ng-src="{{user.AvatarFilePath}}" width="80" height="80">
-                            </a>
-
-                        </div>
-                        <div class="col-md-8">
-                            <div class="row">
-                                <a href="/#/Users/{{user.Id}} ">
-                                    <span>{{user.UserName}}</span>
-                                </a>
-                                <span>{{user.LastActivity |ctime |date:'medium'}}</span>
-
-                            </div>
-                            <div class="row">
-                                <button class="btn-default pull-right" ng-click="addFriend(user)">
-                                    В друзья
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table class="table ">
+                <tr>
+                    <th></th>
+                    <th>Действие</th>
+                    <th>Слушает</th>
+                    <th>Последняя Активность</th>
+                </tr>
+                <tr ng-repeat="user in users| filter:titleSearch |onlineUsersFilter: onlineFilter">
+                    <td>
+                        <a href="/#/Users/{{user.Id}} ">
+                            <img ng-src="{{user.AvatarFilePath}}" width="80" height="80">
+                        </a>
+                        <a href="/#/Users/{{user.Id}} ">{{user.FirstName}}</a>
+                    </td>
+                    <td>
+                        <button class="btn-default" ng-click="addFriend(user)">
+                            Добавить
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button><br />
+                        <a class="btn-link" href="/#/Conversations/{{user.Id}}?dialog=true">Написать Сообщение</a>
+                    </td>
+                    <td>
+                        <a href="/#/Songs/{{user.CurrentSong.SongId}} ">
+                            <span>{{user.CurrentSong.Artist}}</span>
+                            <span> - </span>
+                            <span>{{user.CurrentSong.Title}}</span>
+                        </a>
+                    </td>
+                    <td>
+                        <span>{{user.LastActivityDate}}</span>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

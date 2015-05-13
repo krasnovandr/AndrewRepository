@@ -295,6 +295,10 @@
     <Compile Include="Migrations\201504251309531_DeletePlaylistFromSong.Designer.cs">
       <DependentUpon>201504251309531_DeletePlaylistFromSong.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505041927055_UpdateFriendsTable.cs" />
+    <Compile Include="Migrations\201505041927055_UpdateFriendsTable.Designer.cs">
+      <DependentUpon>201505041927055_UpdateFriendsTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -485,6 +489,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504251309531_DeletePlaylistFromSong.resx">
       <DependentUpon>201504251309531_DeletePlaylistFromSong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505041927055_UpdateFriendsTable.resx">
+      <DependentUpon>201505041927055_UpdateFriendsTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

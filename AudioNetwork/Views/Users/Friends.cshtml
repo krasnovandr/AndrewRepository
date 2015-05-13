@@ -1,6 +1,13 @@
 ﻿<div ng-controller="UsersController">
     <div class="container">
         <div class="row">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" ng-click="getFriends();state=1">Все друзья</button>
+                <button type="button" class="btn btn-primary" ng-click="getOutgoingRequests();state=2">Исходящие заявки</button>
+                <button type="button" class="btn btn-primary" ng-click="getIncomingRequests();state=3">Входящие заявки</button>
+            </div>
+        </div>
+        <div class="row">
             <input class="form-control" type="search" ng-model="titleSearch" placeholder="Начните вводить имя друга" />
             <label for="onlineFilter">Только Онлайн</label>
             <input type="checkbox" ng-model="onlineFilter" id="onlineFilter" />
@@ -21,8 +28,12 @@
                         <a href="/#/Users/{{user.Id}} ">{{user.FirstName}}</a>
                     </td>
                     <td>
-                        <button class="btn-default" ng-click="removeFriend(user)">
+                        <button ng-show="state == 1" class="btn-default" ng-click="removeFriend(user)">
                             Удалить
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                        </button><br />
+                        <button ng-show="state == 3"  class="btn-default" ng-click="confirmFriend(user)">
+                            Принять заявку
                             <span class="glyphicon glyphicon-remove-circle"></span>
                         </button><br />
                         <a class="btn-link" href="/#/Conversations/{{user.Id}}?dialog=true">Написать Сообщение</a>

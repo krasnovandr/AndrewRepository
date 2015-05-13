@@ -119,8 +119,9 @@ namespace DataLayer.Models
     {
         [Key]
         public string RecordId { get; set; }
-        public string Id { get; set; }
+        public string UserId { get; set; }
         public string FriendId { get; set; }
+        public bool Confirmed { get; set; }
         public DateTime AddDate { get; set; }
     }
 
