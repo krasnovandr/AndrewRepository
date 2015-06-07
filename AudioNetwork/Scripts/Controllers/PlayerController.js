@@ -1,5 +1,5 @@
 ﻿angular.module('AudioNetworkApp').
-controller('PlayerController', function ($scope, $http, $location, $rootScope, musicService, userService, $infScroll) {
+controller('PlayerController', function ($scope, $http, $location, $rootScope, musicService, userService, $infScroll, uploadService) {
 
     $scope.ShowMusic = false;
 
@@ -107,6 +107,15 @@ controller('PlayerController', function ($scope, $http, $location, $rootScope, m
         //musicService.downloadSong(song).success(function (result) {
         //    //$scope.getMyMusic();
         //});
+    };
+
+    $scope.downloadZip = function () {
+        var data = {
+            id: $rootScope.logState.Id
+        };
+        uploadService.downloadZip(data).success(function (parameters) {
+
+        });
     };
     
     $rootScope.getMyPlayLists = function () {

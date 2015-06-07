@@ -90,9 +90,10 @@ namespace DataLayer.Repositories
                     user.Country = userInfo.Country;
                     user.FirstName = userInfo.FirstName;
                     user.LastName = userInfo.LastName;
-                    user.BirthDate = userInfo.BirthDate ?? DateTime.Now;
+                    user.BirthDate = userInfo.BirthDate?? DateTime.Now;
                     user.LastEntrenchedSong = userInfo.LastEntrenchedSong;
                     user.WorstGenre = userInfo.WorstGenre;
+                    user.LastActivity = DateTime.Now;
                     //user.BestAtrists = userInfo.BestAtrists;
                     //user.BestGenres = userInfo.BestGenres;
                 }

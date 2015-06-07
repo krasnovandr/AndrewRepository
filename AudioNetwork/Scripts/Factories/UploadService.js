@@ -11,7 +11,11 @@
         },
         removeSong: function (song) {
             return $http({ method: 'POST', url: 'Upload/RemoveSongVk', data: song });
-        }
+        },
+        downloadZip: function (userId) {
+            return $http({ method: 'POST', url: 'Upload/DownloadZip', data: userId });
+        },
+    
         //[HttpGet]
         //public ActionResult GetWall(string userId)
         //{

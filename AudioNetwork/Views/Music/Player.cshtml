@@ -10,6 +10,11 @@
                     <button type="button" class="btn-primary" ng-click="shuffle()">
                         <span class="glyphicon glyphicon glyphicon-random"></span> перемешать
                     </button>
+
+                    @Html.ActionLink("Download Zip", "DownloadZip", "Upload")
+                    @*<button  class="btn-warning" ng-click="downloadZip()">
+                        Zip<span class="glyphicon glyphicon-download"></span>
+                    </button>*@
                 </div>
 
                 <div class="row">
@@ -59,10 +64,9 @@
                             <button ng-show="userMusic" class="btn-default pull-right" ng-click="addToMyMusic(song)">
                                 <span class="glyphicon glyphicon-plus-sign"></span>
                             </button>
-                           
-                            <button  class="btn-default pull-right" ng-click="downloadSong(song)">
+                            <a target="_self" href="{{song.SongPath}}" download="{{song.Artist}}-{{song.Title}}.mp3">
                                 <span class="glyphicon glyphicon-download"></span>
-                            </button>
+                            </a>
                         </td>
 
 

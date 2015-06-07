@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using AudioNetwork.Helpers;
 using AudioNetwork.Models;
 using AudioNetwork.Services;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.AspNet.Identity;
 
 namespace AudioNetwork.Controllers
@@ -111,6 +114,47 @@ namespace AudioNetwork.Controllers
 
             }
             return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public FileResult DownloadZip()
+        {
+            var id = User.Identity.GetUserId();
+            var songs = _musicService.GetUserSongs(id);
+          //  var song = songs.FirstOrDefault();
+
+            var baseOutputStream = new MemoryStream();
+            var zipOutput = new ZipOutputStream(baseOutputStream)
+            {
+                IsStreamOwner = false
+            };
+
+            /*  
+            * Higher compression level will cause higher usage of reources 
+            * If not necessary do not use highest level 9 
+            */
+
+            zipOutput.SetLevel(9);
+           // byte[] buffer = new byte[4096];
+            foreach (var song in songs)
+            {
+                var path = Server.MapPath(FilePathContainer.SongVirtualPath) + song.id + FilePathContainer.SongDefaultFormat;
+                SharpZipLibHelper.AddFileToZip(zipOutput, path, song.Artist + song.Title + FilePathContainer.SongDefaultFormat);
+                
+            }
+                
+            zipOutput.Finish();
+            zipOutput.Close();
+
+            /* Set position to 0 so that cient start reading of the stream from the begining */
+            baseOutputStream.Position = 0;
+
+            /* Set custom headers to force browser to download the file instad of trying to open it */
+            return new FileStreamResult(baseOutputStream, "application/x-zip-compressed")
+            {
+                FileDownloadName = "Songs.zip"
+            };
+
         }
 
 

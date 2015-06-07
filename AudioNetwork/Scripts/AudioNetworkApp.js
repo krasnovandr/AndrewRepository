@@ -218,6 +218,8 @@ var config = function ($routeProvider) {
           templateUrl: 'Music',
       }).when('/Statistics', {
           templateUrl: 'Statistics/ViewStatistics',
+      }).when('/News', {
+          templateUrl: 'Wall/ViewNews',
       }).
        otherwise({
            redirectTo: '/Login'

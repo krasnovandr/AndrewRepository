@@ -235,16 +235,17 @@
                             <div class="col-md-1">
                                 <a ng-click="removeWallItemSong(song,$index)" class="close">×</a>
                             </div>
-                            </div>
+                        </div>
                     </div>
                     <div class="row top10">
                         <div ng-repeat="item in wallItems">
                             <div class="row top10">
-                                <div class="col-md-1">
-                                    <img ng-src="{{item.AddByUser.AvatarFilePath}}" width="50" height="50" /><br />
-                                    <span>{{item.AddByUser.FirstName}}</span>
+                                <div class="col-md-2">
+                                    <img ng-src="{{item.AddByUser.AvatarFilePath}}" />
+
                                 </div>
                                 <div class="col-md-6">
+                                    <strong>{{item.AddByUser.FirstName}} {{item.AddByUser.LastName}}</strong><br />
                                     <span ng-bind-html="item.Note | linky"></span>
                                     <div ng-repeat="songItem in item.ItemSongs">
                                         <div class="row top10">

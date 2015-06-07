@@ -9,7 +9,12 @@
          { Name: 'Топ прослушиваемых', Type: 4 }];
 
 
-
+        $scope.predicate = 'ListenCount';
+        $scope.reverse = true;
+        $scope.order = function (predicate) {
+            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+            $scope.predicate = predicate;
+        };
         $scope.currentStatisticType = $scope.statisticTypes[0];
         $scope.getMyFavoriteSongs = function () {
             statisticsService.getMyFavoriteSongs().success(function (songs) {

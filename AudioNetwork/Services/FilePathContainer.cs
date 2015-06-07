@@ -71,5 +71,10 @@
         {
             get { return ".jpg"; }
         }
+
+        public static string SongDefaultFormat
+        {
+            get { return ".mp3"; }
+        }
     }
 }

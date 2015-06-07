@@ -1,4 +1,5 @@
-﻿using VkNet;
+﻿using System;
+using VkNet;
 using VkNet.Enums.Filters;
 
 namespace VkService
@@ -13,7 +14,7 @@ namespace VkService
         public VkAuthorization()
         {
             _login = "375293323876";
-            _pass = "3323876eR";
+            _pass = "3323876may1993";
         }
 
         public VkAuthorization(string login, string pass)
@@ -27,7 +28,15 @@ namespace VkService
             var vk = new VkApi();
             if (string.IsNullOrEmpty(_login) == false && string.IsNullOrEmpty(_pass) == false)
             {
-                vk.Authorize(AppId, _login, _pass, _scope);
+                try
+                {
+                    vk.Authorize(AppId, _login, _pass, _scope);
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+
 
                 return vk;
             }

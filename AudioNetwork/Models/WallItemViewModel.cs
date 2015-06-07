@@ -18,7 +18,7 @@ namespace AudioNetwork.Models
         {
             get
             {
-                return AddDate.ToString("MM/dd/yyyy HH:mm");
+                return AddDate.ToString("dd/MM/yyyy HH:mm");
             }
         }
 

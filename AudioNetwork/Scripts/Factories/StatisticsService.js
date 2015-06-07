@@ -14,6 +14,7 @@
         },
         getChartData: function (song) {
             return $http({ method: 'POST', url: 'Statistics/GetChartData', data: song });
-        }
+        },
+    
     };
 });

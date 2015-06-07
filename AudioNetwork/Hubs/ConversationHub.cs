@@ -1,4 +1,6 @@
 ﻿using System;
+using AudioNetwork.Services;
+using DataLayer.Repositories;
 using Microsoft.AspNet.SignalR;
 
 namespace AudioNetwork.Hubs
@@ -11,28 +13,30 @@ namespace AudioNetwork.Hubs
     public class ConversationHub : Hub
     {
         //static List<TestUserModel> Users = new List<TestUserModel>();
-        //private readonly IUserRepository _userRepository;
-        //private readonly IConversationRepository _conversationRepository;
+        //private readonly IUserService _userService;
+        ////private readonly IConversationRepository _conversationRepository;
 
-        //public ConversationHub(
-        //    IUserRepository userRepository,
-        //    IConversationRepository conversationRepository)
+        //public ConversationHub()
         //{
-        //    _userRepository = userRepository;
-        //    _conversationRepository = conversationRepository;
+            
         //}
 
-        public void GreetAll(int a)
-        {
-            a++;
-            Clients.All.acceptGreet(a + "Good morning! The time is " + DateTime.Now.ToString());
-        }
+        //public ConversationHub(IUserService userService)
+        //{
+        //    _userService = userService;
+        //}
 
         public void SendedMessage()
         {
 
-            Clients.All.newMessage();
+            Clients.All.newMessage(); 
         }
+
+        //public void TypingMessage(string userId, string conversationId)
+        //{
+        //    var user = _userService.GetUser(userId);
+        //    Clients.All.newM();
+        //}
 
         public void ChangeConversationSong()
         {

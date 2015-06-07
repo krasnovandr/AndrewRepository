@@ -21,11 +21,12 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
     { Title: 'Беседы', ConversationType: 2 },
     { Title: 'Диалоги', ConversationType: 3 },
     { Title: 'Открытые', ConversationType: 4 }];
-
-
+   
+    $.connection.hub.start();
 
     $scope.currentConversationType = $scope.conversationTypes[0];
 
+  
     $scope.open = function (size) {
 
         var modalInstance = $modal.open({
@@ -156,6 +157,11 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
         });
     };
 
+    //$rootScope.testHub.client.newM = function (message) {
+    //    $rootScope.$apply(function () {
+    //        $scope.userWritiingMessage = "asdasd";
+    //    });
+    //};
     $rootScope.chat.client.conversationSongChanged = function (message) {
         $timeout(function () {
             $rootScope.$apply(function () {
@@ -217,8 +223,6 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
         });
     };
 
-    $.connection.hub.start().done(function () {
-    });
 
     $scope.getFriends = function () {
         userService.getFriends().success(function (friends) {
@@ -294,10 +298,16 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
         messagesService.addMessageToConversation(data).success(function () {
             // $scope.scrollRemaining = $scope.wrapper.scrollHeight - $scope.wrapper.scrollTop + 5;
             $scope.newMessage = "";
+            $scope.messageSongs = [];
             $scope.getCurrentConversationMessages();
             $rootScope.chat.server.sendedMessage();
+            $scope.userWritiingMessage = "";
         });
     };
+
+    $scope.messageTyped = function (parameters) {
+       // $rootScope.testHub.server.typingMessage();
+    }
 
     $scope.removeMessage = function (message) {
         var messageData = {
@@ -339,5 +349,9 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
         });
     };
     $scope.getAllMusicConversations();
+    $rootScope.TotalNotReadMessages();
+
+ 
+
 });
 

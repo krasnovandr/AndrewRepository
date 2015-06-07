@@ -16,7 +16,7 @@ controller('MyController', function ($scope, userService, FileUploader, $modal) 
     $scope.getMyInfo = function () {
         userService.getMyInfo().success(function (userInfo) {
             $scope.userInfo = userInfo;
-            $scope.userInfo.BirthDate = new Date($scope.userInfo.BirthDate);
+            $scope.userInfo.BirthDate = new Date(parseInt( $scope.userInfo.BirthDate.substr(6)));
         });
     };
     $scope.getMyInfo();

@@ -463,3 +463,9 @@ border: 1px solid black
   opacity:1;
   max-height:40px;
 }
+  .sortorder:after {
+    content: '\25b2';
+  }
+  .sortorder.reverse:after {
+    content: '\25bc';
+  }

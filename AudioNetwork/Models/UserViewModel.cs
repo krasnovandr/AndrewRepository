@@ -22,7 +22,7 @@ namespace AudioNetwork.Models
         {
             get
             {
-                return this.LastActivity.ToString("MM/dd/yyyy HH:mm:ss");
+                return this.LastActivity.ToString("dd/MM/yyyy HH:mm");
             }
         }
         public string Email { get; set; }
@@ -36,9 +36,11 @@ namespace AudioNetwork.Models
         {
             get
             {
-                return this.BirthDate.ToString("MM/dd/yyyy");
+                return this.BirthDate.ToString("dd/MM/yyyy");
             }
         }
+
+
 
         public bool IsOnline
         {

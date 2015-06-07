@@ -10,6 +10,7 @@ namespace DataLayer.Repositories
         IEnumerable<Song> GetSongs(string userId);
         //IEnumerable<Song> GetSongs(string userId, string playListid);
         IEnumerable<Song> GetSongs();
+        IEnumerable<Song> GetSongsUploadBy(string userId);
         // void RemovePlaylist(string userId, string playListid);
         // void RemoveSong(string userId, string playListId, string songId);
 
@@ -52,6 +53,17 @@ namespace DataLayer.Repositories
             using (var db = new ApplicationDbContext())
             {
                 var songsDb = db.Songs.ToList();
+                songs.AddRange(songsDb);
+            }
+            return songs.OrderByDescending(m => m.AddDate);
+        }
+
+        public IEnumerable<Song> GetSongsUploadBy(string userId)
+        {
+            var songs = new List<Song>();
+            using (var db = new ApplicationDbContext())
+            {
+                var songsDb = db.Songs.Where(m => m.AddBy == userId);
                 songs.AddRange(songsDb);
             }
             return songs.OrderByDescending(m => m.AddDate);

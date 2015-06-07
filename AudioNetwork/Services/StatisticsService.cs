@@ -44,7 +44,7 @@ namespace AudioNetwork.Services
                     result.Add(song);
                 }
             }
-            return result;
+            return result.OrderByDescending(m=>m.ListenCount);
         }
 
         public IEnumerable<SongViewModel> GetFavouriteSongs()
@@ -61,7 +61,7 @@ namespace AudioNetwork.Services
                     result.Add(song);
                 }
             }
-            return result;
+            return result.OrderByDescending(m => m.ListenCount);
         }
 
         public IEnumerable<SongViewModel> GetLastListenedSongs(string userId)
@@ -111,5 +111,7 @@ namespace AudioNetwork.Services
             }
             return chartData;
         }
+
+
     }
 }

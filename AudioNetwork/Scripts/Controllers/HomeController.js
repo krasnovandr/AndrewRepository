@@ -11,6 +11,10 @@
         $rootScope.canvas.height = 10;
         $rootScope.timeElapsed = 0;
 
+      
+
+        $rootScope.chat = $.connection.conversationHub;
+        //$rootScope.testHub = $.connection.testHub;
 
         $rootScope.$watch('soundVolume.volume', function () {
             $rootScope.audio.volume = $rootScope.soundVolume.volume / 100;
@@ -157,7 +161,7 @@
 
         $rootScope.TotalNotReadMessages();
 
-        $rootScope.chat = $.connection.conversationHub;
+
 
         $scope.text = "";
 

@@ -9,16 +9,16 @@ namespace DataLayer.Repositories
 {
     public interface IStatisticsRepository
     {
-        IEnumerable<ListenedSong> GetLastListenedSongs(string userId, int count = 50);
-        IEnumerable<Song> GetFavoriteSongs(int count = 50);
-        IEnumerable<Song> GetFavoriteSongs(string userId, int count = 50);
-        IEnumerable<Song> GetLastAdded(int count = 50);
-        IEnumerable<ListenedSong> GetSongListeneInfo(string songId, int count = 50);
+        IEnumerable<ListenedSong> GetLastListenedSongs(string userId, int count = 250);
+        IEnumerable<Song> GetFavoriteSongs(int count = 250);
+        IEnumerable<Song> GetFavoriteSongs(string userId, int count = 250);
+        IEnumerable<Song> GetLastAdded(int count = 250);
+        IEnumerable<ListenedSong> GetSongListeneInfo(string songId, int count = 250);
     }
 
     public class StatisticsRepository : IStatisticsRepository
     {
-        public IEnumerable<ListenedSong> GetLastListenedSongs(string userId, int count = 50)
+        public IEnumerable<ListenedSong> GetLastListenedSongs(string userId, int count = 250)
         {
             List<ListenedSong> myListenSongs;
 
@@ -38,7 +38,7 @@ namespace DataLayer.Repositories
             return myListenSongs.Take(count);
         }
 
-        public IEnumerable<ListenedSong> GetSongListeneInfo(string songId, int count = 50)
+        public IEnumerable<ListenedSong> GetSongListeneInfo(string songId, int count = 250)
         {
             List<ListenedSong> myListenSongs;
 
@@ -58,8 +58,7 @@ namespace DataLayer.Repositories
             return myListenSongs.Take(count);
         }
 
-
-        public IEnumerable<Song> GetFavoriteSongs(int count = 50)
+        public IEnumerable<Song> GetFavoriteSongs(int count = 250)
         {
             var result = new List<Song>();
 
@@ -77,7 +76,7 @@ namespace DataLayer.Repositories
             return result.Take(count);
         }
 
-        public IEnumerable<Song> GetFavoriteSongs(string userId, int count = 50)
+        public IEnumerable<Song> GetFavoriteSongs(string userId, int count = 250)
         {
             var result = new List<Song>();
 
@@ -95,7 +94,7 @@ namespace DataLayer.Repositories
             return result.Take(count);
         }
 
-        public IEnumerable<Song> GetLastAdded(int count = 50)
+        public IEnumerable<Song> GetLastAdded(int count = 250)
         {
             List<Song> result;
 

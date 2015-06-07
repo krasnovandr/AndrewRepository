@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using AudioNetwork.Models;
 using AudioNetwork.Services;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 
 namespace AudioNetwork.Controllers
@@ -13,6 +14,25 @@ namespace AudioNetwork.Controllers
             IWallService wallService)
         {
             _wallService = wallService;
+        }
+
+        public ActionResult ViewNews()
+        {
+            return View("News");
+        }
+
+        public JsonResult GetNews()
+        {
+            var userId = User.Identity.GetUserId();
+
+            return Json(_wallService.GetUserNews(userId), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetFriendUpdates()
+        {
+            var userId = User.Identity.GetUserId();
+
+            return Json(_wallService.GetFriendUpdates(userId), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

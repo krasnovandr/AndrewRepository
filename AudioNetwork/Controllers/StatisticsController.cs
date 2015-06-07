@@ -17,6 +17,7 @@ namespace AudioNetwork.Controllers
         {
             return View("Statistics");
         }
+    
 
         public JsonResult GetMyFavoriteSongs()
         {
