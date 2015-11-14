@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
 using AudioNetwork.Helpers;
 using AudioNetwork.Models;
@@ -152,7 +150,8 @@ namespace AudioNetwork.Controllers
             /* Set custom headers to force browser to download the file instad of trying to open it */
             return new FileStreamResult(baseOutputStream, "application/x-zip-compressed")
             {
-                FileDownloadName = "Songs.zip"
+                FileDownloadName = "Songs.zip",
+                
             };
 
         }

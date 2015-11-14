@@ -57,7 +57,7 @@
                             <img ng-src="{{user.AvatarFilePath}}" width="80" height="80" />
                         </div>
                         <div class="col-md-3">
-                            <span>{{user.UserName}}</span>
+                            <span>{{user.FirstName}} {{user.LastName}}</span>
                         </div>
                         <div class="col-md-1" ng-if="currentConversation.IsDialog==false">
                             <button class="btn-default" ng-click="removeUserFromConversation(user)">
@@ -76,7 +76,7 @@
                         <img ng-src="{{user.AvatarFilePath}}" width="50" height="50" />
                     </div>
                     <div class="col-md-3">
-                        <span>{{user.UserName}}</span>
+                        <span>{{user.FirstName}} {{user.LastName}}</span>
                     </div>
                     <div class="col-md-3">
                         <span>{{user.LastActivityDate}}</span>

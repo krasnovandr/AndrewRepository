@@ -21,6 +21,12 @@ namespace AudioNetwork.Controllers
             return View("News");
         }
 
+        
+        public ActionResult ViewLikeModal()
+        {
+            return View("UserLike");
+        }
+
         public JsonResult GetNews()
         {
             var userId = User.Identity.GetUserId();
@@ -63,5 +69,27 @@ namespace AudioNetwork.Controllers
 
             return Json(null, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public EmptyResult SetLikeDislike(int wallItemId, bool like, bool dislike)
+        {
+            var userId = User.Identity.GetUserId();
+
+            _wallService.SetLikeDislike(wallItemId, userId, like, dislike);
+
+            return new EmptyResult();
+        }
+
+        //[HttpPost]
+        //public ActionResult SetLikeDislike(int wallItemId, string userId, bool like, bool dislike)
+        //{
+        //    var userId = User.Identity.GetUserId();
+        //    _wallService.RemoveWallItem(userId, wallItemId);
+
+        //    return Json(null, JsonRequestBehavior.AllowGet);
+        //}
+
+        //void SetLikeDislike(int wallItemId, string userId, bool like, bool dislike);
+        //List<WallItemLikeDislikeViewModel> GetWallItemLikeDislikes(int wallItemId);
     }
 }

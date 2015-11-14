@@ -2,6 +2,22 @@
 {
     public static class FilePathContainer
     {
+        public static string WallPicturePhysicalPath
+        {
+            get
+            {
+                return "~/Content/WallItemsImages/";
+            }
+        }
+
+        public static string WallPictureRelative
+        {
+            get
+            {
+                return "Content/WallItemsImages/";
+            }
+        }
+
         public static string ForImagePhysicalPath
         {
             get

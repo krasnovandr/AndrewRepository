@@ -10,7 +10,7 @@
                         <span class="glyphicon glyphicon-music"></span>
                     </button>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-7" ng-show="currentConversation.CurrentSong != null">
                     <img ng-src="{{currentConversation.CurrentSong.SongAlbumCoverPath}}" width="50" height="50" />
                     <a href="/#/Songs/{{currentConversation.CurrentSong.SongId}} ">
                         <span>{{currentConversation.CurrentSong.Title}}</span>-

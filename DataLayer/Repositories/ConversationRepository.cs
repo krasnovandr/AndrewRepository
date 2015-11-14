@@ -367,7 +367,7 @@ namespace DataLayer.Repositories
                     {
                         MessageId = Guid.NewGuid().ToString(),
                         FromId = myId,
-                        FromName = user.UserName,
+                        FromName = user.FirstName,
                         AddDate = DateTime.Now,
                         FromAvatarPath = user.AvatarFilePath,
                         Text = text

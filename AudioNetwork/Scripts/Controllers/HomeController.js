@@ -1,5 +1,5 @@
 ﻿angular.module('AudioNetworkApp')
-    .controller('HomeController', function ($, $scope, $http, $location, $rootScope, musicService, userService, $infScroll, messagesService, $interval, signalRService) {
+    .controller('HomeController', function ($, $scope, $http, $location, $rootScope, musicService, userService, $infScroll, messagesService, $interval, signalRService, $timeout) {
 
         //Player
         $rootScope.canvas = document.getElementById('canvas');
@@ -10,10 +10,14 @@
         $rootScope.canvas.width = 450;
         $rootScope.canvas.height = 10;
         $rootScope.timeElapsed = 0;
-
-      
+     
+        $scope.isActive = function (viewLocation) {
+            var active = (viewLocation === $location.path());
+            return active;
+        };
 
         $rootScope.chat = $.connection.conversationHub;
+        $.connection.hub.start().done(function () { });
         //$rootScope.testHub = $.connection.testHub;
 
         $rootScope.$watch('soundVolume.volume', function () {
@@ -145,12 +149,15 @@
             $rootScope.isCollapsed = !$rootScope.isCollapsed;
             $rootScope.opacityPlayer = 1.0;
         };
+
+        // $rootScope.opacityPlayer = 0.1;
         //////////////////////////////////
         $rootScope.messagesCount = 0;
         $rootScope.logState = {
             LoggedIn: false,
             UserName: "",
-            Id: ""
+            Id: "",
+         
         };
 
         $rootScope.TotalNotReadMessages = function () {
@@ -161,10 +168,16 @@
 
         $rootScope.TotalNotReadMessages();
 
+        $rootScope.chat.client.newMessage = function (message) {
+            $timeout(function () {
+                $rootScope.$apply(function () {
+                    $rootScope.TotalNotReadMessages();
 
+                });
+            }, 0);
+        };
 
         $scope.text = "";
-
 
 
     });

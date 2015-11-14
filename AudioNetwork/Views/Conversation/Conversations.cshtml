@@ -48,19 +48,21 @@
             <div ng-repeat="conversation in openConversations | filter:openConversationTitle">
                 <div class="row">
                     <div class="col-md-3">
-                        <img class="pull-left" ng-click="startConversation(conversation)" ng-src="{{conversation.ConversationAvatarFilePath}}" width="50" height="50" />
+                        <img  ng-click="startConversation(conversation)" ng-src="{{conversation.ConversationAvatarFilePath}}" width="50" height="50" />
                     </div>
                     <div class="col-md-3">
                         {{conversation.Name}}
                     </div>
                     <div class="col-md-4">
-                        <span>Сейчас играет:</span>
-                        <a href="/#/Songs/{{conversation.CurrentSong.SongId}} ">
+                        <span ng-show="conversation.currentsong != null">Сейчас играет:</span>
+                        <a ng-show="conversation.currentsong != null"  href="/#/Songs/{{conversation.CurrentSong.SongId}} ">
                             <span>{{conversation.CurrentSong.Artist}} - {{conversation.CurrentSong.Title}}</span>
                         </a>
                     </div>
-                    <div class="col-md-3" ng-show="MyConversation== false">
-                        <button class="btn"><span class="glyphicon glyphicon-play-circle">Вступить</span></button>
+                    <div class="col-md-3" ng-show="conversation.CreatorId != logState.Id">
+                        <button class="btn" ng-click="addUserToConversation(logState.Id,conversation.ConversationId)">
+                            <span class="glyphicon">Вступить</span>
+                        </button>
                     </div>
                 </div>
             </div>

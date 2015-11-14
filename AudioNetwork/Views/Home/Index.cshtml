@@ -14,14 +14,16 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" ng-show="logState.LoggedIn" ng-bind="logState.UserName" href="/#/Home">Моя страница</a>
+                    <ul class="nav navbar-nav">
+                        <li ng-class="{ active: isActive('/Home') }"><a class="navbar-brand" ng-show="logState.LoggedIn" href="/#/Home">Моя страница</a></li>
+                    </ul>
                 </div>
                 <div class="collapse navbar-collapse" ng-class="{'in':!navCollapsed}">
                     <ul class="nav navbar-nav">
-                        <li><a ng-show="logState.LoggedIn" href="/#/Users">Люди</a></li>
-                        <li><a ng-show="logState.LoggedIn" href="/#/Friends">Друзья</a></li>
-                        <li> <a ng-show="logState.LoggedIn" href="/#/Conversations">Cообщения<span class="badge">{{messagesCount}}</span></a></li>
-                        <li> <a ng-show="logState.LoggedIn" href="/#/EditConversations">Редактировать беседы</a></li>
+                        <li ng-class="{ active: isActive('/Users') }"><a ng-show="logState.LoggedIn" href="/#/Users">Люди</a></li>
+                        <li ng-class="{ active: isActive('/Friends') }"><a ng-show="logState.LoggedIn" href="/#/Friends">Друзья</a></li>
+                        <li ng-class="{ active: isActive('/Conversations') }"> <a ng-show="logState.LoggedIn" href="/#/Conversations">Cообщения<span class="badge">{{messagesCount}}</span></a></li>
+                        <li ng-class="{ active: isActive('/EditConversations') }"> <a ng-show="logState.LoggedIn" href="/#/EditConversations">Редактировать беседы</a></li>
                         @*<li><a ng-show="logState.LoggedIn" href="/#/Music">Музыка</a></li>*@
 
                         <li ng-show="logState.LoggedIn" class=" btn-group" dropdown is-open="status.isopen">
@@ -29,18 +31,25 @@
                                 Музыка <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a ng-show="logState.LoggedIn" href="/#/Player">Плеер</a></li>
-                                <li><a ng-show="logState.LoggedIn" href="/#/Playlists">Плейлисты</a></li>
-                                <li><a ng-show="logState.LoggedIn" href="/#/Upload">Загрузить</a></li>
+                                <li ng-class="{ active: isActive('/Player') }"><a ng-show="logState.LoggedIn" href="/#/Player">Плеер</a></li>
+                                <li ng-class="{ active: isActive('/Playlists') }"><a ng-show="logState.LoggedIn" href="/#/Playlists">Плейлисты</a></li>
+                                <li ng-class="{ active: isActive('/Upload') }"><a ng-show="logState.LoggedIn" href="/#/Upload">Загрузить</a></li>
                             </ul>
                         </li>
-                        <li> <a ng-show="logState.LoggedIn" href="/#/Statistics">Статистика</a></li>
-                        <li> <a ng-show="logState.LoggedIn" href="/#/News">Новости</a></li>
-                        @*  <li> <a ng-show="logState.LoggedIn" href="/#/Messages">Сейчас слушает:{{CurrentSong.Title}}- {{CurrentSong.Artist}}</></a></li>*@
+                        <li ng-class="{ active: isActive('/Statistics') }"> <a ng-show="logState.LoggedIn" href="/#/Statistics">Статистика</a></li>
+                        <li ng-class="{ active: isActive('/News') }"> <a ng-show="logState.LoggedIn" href="/#/News">Новости</a></li>
+                        <li >
+                            <button ng-show="logState.LoggedIn && showPlayer" ng-click="changePlayerVisibility()">
+                                <span class="glyphicon glyphicon-circle-arrow-down"></span>
+                            </button>
+                            <button ng-show="logState.LoggedIn && showPlayer==false" ng-click="changePlayerVisibility()">
+                                <span class="glyphicon glyphicon-circle-arrow-up"></span>
+                            </button>
+                        </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a ng-hide="logState.LoggedIn" href="/#/Login"><span class="glyphicon glyphicon-user"></span> Войти</a></li>
-                        <li><a ng-hide="logState.LoggedIn" href="/#/Register"><span class="glyphicon glyphicon-log-in"></span> Зарегистрироваться</a></li>
+                        <li ng-class="{ active: isActive('/Login') }"><a ng-hide="logState.LoggedIn" href="/#/Login"><span class="glyphicon glyphicon-user"></span> Войти</a></li>
+                        <li ng-class="{ active: isActive('/Register') }"><a ng-hide="logState.LoggedIn" href="/#/Register"><span class="glyphicon glyphicon-log-in"></span> Зарегистрироваться</a></li>
                         <li><a class="btn btn-link" ng-click="logout()" ng-show="logState.LoggedIn"> <span class="glyphicon glyphicon-log-in"></span>Выйти</a></li>
                     </ul>
                 </div>
@@ -48,7 +57,7 @@
         </nav>
     </div>
 
-    <div ng-show="logState.LoggedIn" class="container" ng-mouseenter="opacityPlayer = 1.0" ng-mouseleave="opacityPlayer = 0.1" ng-style="{opacity:opacityPlayer}">
+    <div ng-show="logState.LoggedIn && showPlayer" class="container">
 
         @*<div collapse="isCollapsed">
                 <div class="well well-lg">Some content</div>
@@ -84,61 +93,35 @@
                         </span>
                     </button>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div>
-                    <a href="/#/Songs/{{CurrentSong.SongId}} ">
-                        <span>{{CurrentSong.Artist}}</span>
-                        <span> - </span>
-                        <span>{{CurrentSong.Title}}</span>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-1">
-                        <span>{{currentTime}}</span>
-                    </div>
-                    <div class="col-md-8">
-                        <canvas id="canvas" class="SongProgress"></canvas>
-                    </div>
-                    <div class="col-md-1">
-                        <span>{{duration}}</span>
+                <div class="col-md-3">
+                    <div>
+                        <a href="/#/Songs/{{CurrentSong.SongId}} ">
+                            <span>{{CurrentSong.Artist}}</span>
+                            <span> - </span>
+                            <span>{{CurrentSong.Title}}</span>
+                        </a>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-1">
-                <input type="range" class="progress-bar progress-bar-striped" min="0" max="100" value="50" ng-model="soundVolume.volume" />
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <span>{{currentTime}}</span>
+                        </div>
+                        <div class="col-md-8">
+                            <canvas id="canvas" class="SongProgress"></canvas>
+                        </div>
+                        <div class="col-md-1">
+                            <span>{{duration}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <input type="range" class="progress-bar progress-bar-striped" min="0" max="100" value="50" ng-model="soundVolume.volume" />
+                </div>
             </div>
         </nav>
     </div>
 
-    @*<h2>Чат-комната</h2>
-        <div data-ng-controller="HomeController">
-            <input type="button" name="GreetAll" value="Greet All" data-ng-click="greetAll()" />
-            <span>{{text}}</span>
-        </div>*@
-    @*<div class="main">
-            <div id="loginBlock">
-                Введите логин:<br />
-                <input id="txtUserName" type="text" />
-                <input id="btnLogin" type="button" value="Войти" />
-            </div>
-            <div id="chatBody">
-                <div id="header"></div>
-                <div id="inputForm">
-                    <input type="text" id="message" />
-                    <input type="button" id="sendmessage" value="Отправить" />
-                </div>
-                <div id="chatroom"></div>
-
-                <div id="chatusers">
-                    <p><b>Все пользователи</b></p>
-                </div>
-            </div>
-            <input id="hdId" type="hidden" />
-            <input id="username" type="hidden" />
-        </div>*@
     <div ng-view></div>
 
     <script src="~/Scripts/Libs/angular.min.js"></script>

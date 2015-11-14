@@ -13,6 +13,12 @@
         removeWallItem: function (wallItem) {
             return $http({ method: 'POST', url: 'Wall/RemoveWallItem', data: wallItem });
         },
+        like: function (wallItem) {
+            return $http({ method: 'POST', url: 'Wall/SetLikeDislike', data: wallItem });
+        },
+        dislike: function (wallItem) {
+            return $http({ method: 'POST', url: 'Wall/SetLikeDislike', data: wallItem });
+        },
         getNews: function () {
             return $http.get('Wall/GetNews');
         },

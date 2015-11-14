@@ -47,6 +47,7 @@
                 //$rootScope.logState.LoggedIn = answer.LoggedIn;
                 //$rootScope.logState.Id = answer.Id;
                 $rootScope.logState = answer;
+                $location.path('/Home');
             } else {
             }
         });
@@ -75,6 +76,10 @@
         };
         authorizationService.externalAuthentification(data).success(function (providers) {
         });
+    };
+
+    $rootScope.changePlayerVisibility = function () {
+        $rootScope.showPlayer = !$rootScope.showPlayer;
     };
 
 });

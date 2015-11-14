@@ -21,12 +21,12 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
     { Title: 'Беседы', ConversationType: 2 },
     { Title: 'Диалоги', ConversationType: 3 },
     { Title: 'Открытые', ConversationType: 4 }];
-   
-    $.connection.hub.start();
+
+
 
     $scope.currentConversationType = $scope.conversationTypes[0];
 
-  
+
     $scope.open = function (size) {
 
         var modalInstance = $modal.open({
@@ -151,11 +151,18 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
             }
         }
     }, true);
-    $rootScope.chat.client.newMessage = function (message) {
-        $rootScope.$apply(function () {
+
+    $scope.$watch('messagesCount', function (newVal, oldVal) {
+        messagesService.ReadConversationMessages($scope.currentConversation).success(function () {
             $scope.updateAllIncomingMessages();
         });
-    };
+    }, true);
+
+    //$rootScope.chat.client.newMessage = function (message) {
+    //    $rootScope.$apply(function () {
+    //        $scope.updateAllIncomingMessages();
+    //    });
+    //};
 
     //$rootScope.testHub.client.newM = function (message) {
     //    $rootScope.$apply(function () {
@@ -169,7 +176,6 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
 
             });
         }, 0);
-        ;
     };
 
     $scope.getMyMusic = function () {
@@ -305,10 +311,6 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
         });
     };
 
-    $scope.messageTyped = function (parameters) {
-       // $rootScope.testHub.server.typingMessage();
-    }
-
     $scope.removeMessage = function (message) {
         var messageData = {
             messageId: message.MessageId,
@@ -326,9 +328,9 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
     };
 
     $scope.updateAllIncomingMessages = function (parameters) {
-        $scope.TotalNotReadMessages();
+        //  $scope.TotalNotReadMessages();
         $scope.getCurrentConversationMessages();
-        //$scope.getConversations();
+        $scope.getConversations($scope.currentConversationType);
     };
     $scope.getAllMusicConversations = function () {
         messagesService.getAllMusicConversations().success(function (openConversations) {
@@ -351,7 +353,15 @@ function ($, $scope, $routeParams, $location, $interval, messagesService, userSe
     $scope.getAllMusicConversations();
     $rootScope.TotalNotReadMessages();
 
- 
+    $scope.addUserToConversation = function (userId,conversationId) {
+        var data = {
+            userId: userId,
+            conversationId: conversationId
+        };
+        messagesService.addUserToConversation(data).success(function () {
+            $scope.getConversations($scope.currentConversationType);
+        });
+    };
 
 });
 

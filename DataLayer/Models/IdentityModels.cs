@@ -101,9 +101,21 @@ namespace DataLayer.Models
         public string AddByUserId { get; set; }
         public string Note { get; set; }
         public DateTime? AddDate { get; set; }
+        public string Header { get; set; }
         public virtual ICollection<ApplicationUser> Users { get; set; }
     }
 
+    public class WallItemLikeDislike
+    {
+        [Key]
+        public int Id { get; set; }
+        public WallItem WallItem { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+        public string UserId { get; set; }
+        public bool Like { get; set; }
+        public bool DisLike { get; set; }
+        public DateTime? Date { get; set; }
+    }
 
     public class PlaylistItem
     {
@@ -194,6 +206,15 @@ namespace DataLayer.Models
         public int WallItemId { get; set; }
     }
 
+
+    public class WallItemImages
+    {
+        [Key]
+        public int Id { get; set; }
+        public string ImagePath { get; set; }
+        public int WallItemId { get; set; }
+    }
+
     public class MessageSongs
     {
         [Key]
@@ -224,6 +245,8 @@ namespace DataLayer.Models
         public DbSet<WallItemsSongs> WallItemsSongs { get; set; }
         public DbSet<UserConversations> UserConversations { get; set; }
         public DbSet<MessageSongs> MessageSongs { get; set; }
+        public DbSet<WallItemImages> WallItemImages { get; set; }
+        public DbSet<WallItemLikeDislike> WallItemLikeDislike { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -4,7 +4,9 @@ using System.Data.Entity.Core.Objects;
 using System.Drawing;
 using System.Linq;
 using System.Net.Mime;
+using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Hosting;
 using AudioNetwork.Helpers;
 using AudioNetwork.Models;
 using DataLayer.Repositories;
@@ -22,9 +24,12 @@ namespace AudioNetwork.Services
         WallItemViewModel GetWallItem(string userId, int wallItemId);
         void AddWallItem(WallItemViewModel wallItemView);
         void RemoveWallItem(string userId, int wallItemId);
+        string GetWallItemImage(int wallItemId);
         IEnumerable<WallItemViewModel> GetUserNews(string userId);
 
         IEnumerable<FriendUpdateViewModel> GetFriendUpdates(string userId);
+        void SetLikeDislike(int wallItemId, string userId, bool like, bool dislike);
+        List<WallItemLikeDislikeViewModel> GetWallItemLikeDislikes(int wallItemId);
     }
 
     public class WallService : IWallService
@@ -33,6 +38,9 @@ namespace AudioNetwork.Services
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
         private readonly IMusicService _musicService;
+
+        private string _curentId;
+        private string _curentHeader;
 
         public WallService(
             IWallRepository wallRepository,
@@ -46,9 +54,33 @@ namespace AudioNetwork.Services
             _userRepository = userRepository;
         }
 
+        public void SetLikeDislike(int wallItemId, string userId, bool like, bool dislike)
+        {
+            _wallRepository.SetLikeDislike(wallItemId, userId, like, dislike);
+        }
+
+        public List<WallItemLikeDislikeViewModel> GetWallItemLikeDislikes(int wallItemId)
+        {
+            var result = new List<WallItemLikeDislikeViewModel>();
+            var resultFromDb = _wallRepository.GetWallItemLikeDislikes(wallItemId);
+
+            foreach (var item in resultFromDb)
+            {
+                result.Add(new WallItemLikeDislikeViewModel
+                {
+                    Date = item.Date,
+                    User = ModelConverters.ToUserViewModel(_userRepository.GetUser(item.UserId)),
+                    Like = item.Like,
+                    DisLike = item.DisLike,
+                });
+            }
+
+            return result;
+        }
+
         public List<WallItemViewModel> GetWall(string userId)
         {
-            //  Capture();
+
             var wall = _wallRepository.GetWall(userId);
             var wallView = new List<WallItemViewModel>();
             wallView.AddRange(wall.Select(ModelConverters.ToWallItemViewModel));
@@ -57,6 +89,8 @@ namespace AudioNetwork.Services
                 wallItem.AddByUser = ModelConverters.ToUserViewModel(_userRepository.GetUser(wallItem.AddByUserId));
                 wallItem.ItemSongs = new List<SongViewModel>();
                 wallItem.ItemSongs.AddRange(_wallRepository.GetWallItemSongs(userId, wallItem.WallItemId).Select(ModelConverters.ToSongViewModel));
+                wallItem.ImagePath = this.GetWallItemImage(wallItem.WallItemId);
+                wallItem.LikesList = GetWallItemLikeDislikes(wallItem.WallItemId);
             }
             return wallView.OrderByDescending(m => m.AddDate).ToList();
         }
@@ -70,20 +104,48 @@ namespace AudioNetwork.Services
 
         }
 
+        private bool IsUrlValid(string url)
+        {
+
+            string pattern = @"^(http|https|ftp|)\://|[a-zA-Z0-9\-\.]+\.[a-zA-Z](:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+&amp;%\$#\=~])*[^\.\,\)\(\s]$";
+            Regex reg = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            return reg.IsMatch(url);
+        }
         public void AddWallItem(WallItemViewModel wallItemView)
         {
+            var isUri = false;
+            if (string.IsNullOrEmpty(wallItemView.Note) == false)
+            {
+                isUri = IsUrlValid(wallItemView.Note);
+            }
+
+
             var songIds = new List<string>();
             if (wallItemView.ItemSongs != null)
             {
                 songIds = wallItemView.ItemSongs.Select(m => m.SongId).ToList();
             }
-            _wallRepository.AddWallItem(wallItemView.IdUserWall, ModelConverters.ToWallItemModel(wallItemView), songIds);
+
+            var imagePath = string.Empty;
+            if (isUri)
+            {
+                _curentId = Guid.NewGuid() + FilePathContainer.SongAlbumCoverFileFormat;
+                Capture(wallItemView.Note);
+                wallItemView.Header = _curentHeader;
+                imagePath = FilePathContainer.WallPictureRelative + _curentId;
+            }
+            _wallRepository.AddWallItem(wallItemView.IdUserWall, ModelConverters.ToWallItemModel(wallItemView), songIds, imagePath);
 
         }
 
         public void RemoveWallItem(string userId, int wallItemId)
         {
             _wallRepository.RemoveWallItem(userId, wallItemId);
+        }
+
+        public string GetWallItemImage(int wallItemId)
+        {
+            return _wallRepository.GetWallItemImage(wallItemId);
         }
 
         public IEnumerable<WallItemViewModel> GetUserNews(string userId)
@@ -115,7 +177,7 @@ namespace AudioNetwork.Services
             foreach (var friend in friends)
             {
                 var friendSongs = _musicService.GetSongsUploadBy(friend.Id);
-                var groups = friendSongs.GroupBy(y => (int) (y.AddDate.Ticks/TimeSpan.TicksPerMinute/5)).ToList();
+                var groups = friendSongs.GroupBy(y => (int)(y.AddDate.Ticks / TimeSpan.TicksPerMinute / 5)).ToList();
 
                 foreach (var group in groups)
                 {
@@ -140,22 +202,24 @@ namespace AudioNetwork.Services
 
         }
 
-        protected void Capture()
+
+
+        protected void Capture(string url)
         {
-            string url = "http://kinopark.by/film29168.html";
-            Thread thread = new Thread(delegate()
+            var thread = new Thread(delegate()
             {
-                using (WebBrowser browser = new WebBrowser())
+                using (var browser = new WebBrowser())
                 {
+                    browser.ScriptErrorsSuppressed = true;
                     browser.ScrollBarsEnabled = false;
-                    browser.AllowNavigation = true;
+                    browser.AllowNavigation = false;
                     browser.Navigate(url);
-                    browser.Width = 1024;
-                    browser.Height = 768;
+                    browser.Width = 640;
+                    browser.Height = 480;
                     browser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(DocumentCompleted);
                     while (browser.ReadyState != WebBrowserReadyState.Complete)
                     {
-                        System.Windows.Forms.Application.DoEvents();
+                        Application.DoEvents();
                     }
                 }
             });
@@ -166,20 +230,19 @@ namespace AudioNetwork.Services
 
         private void DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            WebBrowser browser = sender as WebBrowser;
-            using (Bitmap bitmap = new Bitmap(browser.Width, browser.Height))
+            var browser = sender as WebBrowser;
+
+            if (browser == null)
+            {
+                return;
+            }
+
+            _curentHeader = browser.DocumentTitle;
+
+            using (var bitmap = new Bitmap(browser.Width, browser.Height))
             {
                 browser.DrawToBitmap(bitmap, new Rectangle(0, 0, browser.Width, browser.Height));
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    bitmap.Save(@"E:\Users\Andrei\Documents\AudioNetworkFail\AudioNetwork\Content\Images\thumbnail.png");
-                    //var img = Image.FromStream(stream);
-                    ////bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                    //img.Save("LOL", System.Drawing.Imaging.ImageFormat.Png);
-                    ////byte[] bytes = stream.ToArray();
-                    // imgScreenShot.Visible = true;
-                    // imgScreenShot.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(bytes);
-                }
+                bitmap.Save(HostingEnvironment.MapPath(FilePathContainer.WallPicturePhysicalPath) + _curentId);
             }
         }
     }

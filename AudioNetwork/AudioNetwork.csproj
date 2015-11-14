@@ -258,6 +258,7 @@
     </Compile>
     <Compile Include="Models\FriendUpdateViewModel.cs" />
     <Compile Include="Models\VkUserModel.cs" />
+    <Compile Include="Models\WallItemLikeDislikeViewModel.cs" />
     <Compile Include="Models\WallItemViewModel.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -428,11 +429,13 @@
     <Content Include="Views\Conversation\ChangeAvatarModal.cshtml" />
     <Content Include="Views\Statistics\Statistics.cshtml" />
     <Content Include="Views\Wall\News.cshtml" />
+    <Content Include="Views\Wall\UserLike.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\SongsAlbumCovers\" />
     <Folder Include="Content\Songs\" />
+    <Folder Include="Content\WallItemsImages\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

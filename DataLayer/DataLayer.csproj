@@ -299,6 +299,46 @@
     <Compile Include="Migrations\201505041927055_UpdateFriendsTable.Designer.cs">
       <DependentUpon>201505041927055_UpdateFriendsTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506072128511_AddWallItemImagesTable.cs" />
+    <Compile Include="Migrations\201506072128511_AddWallItemImagesTable.Designer.cs">
+      <DependentUpon>201506072128511_AddWallItemImagesTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506072130138_AddWallItemImagesTable1.cs" />
+    <Compile Include="Migrations\201506072130138_AddWallItemImagesTable1.Designer.cs">
+      <DependentUpon>201506072130138_AddWallItemImagesTable1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506072131330_AddWallItemImagesTable3.cs" />
+    <Compile Include="Migrations\201506072131330_AddWallItemImagesTable3.Designer.cs">
+      <DependentUpon>201506072131330_AddWallItemImagesTable3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506072313381_UpdateWallItemtable.cs" />
+    <Compile Include="Migrations\201506072313381_UpdateWallItemtable.Designer.cs">
+      <DependentUpon>201506072313381_UpdateWallItemtable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506092131295_AddLikeTable.cs" />
+    <Compile Include="Migrations\201506092131295_AddLikeTable.Designer.cs">
+      <DependentUpon>201506092131295_AddLikeTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506092132367_AddLikeTable1.cs" />
+    <Compile Include="Migrations\201506092132367_AddLikeTable1.Designer.cs">
+      <DependentUpon>201506092132367_AddLikeTable1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506092133122_AddLikeTable2.cs" />
+    <Compile Include="Migrations\201506092133122_AddLikeTable2.Designer.cs">
+      <DependentUpon>201506092133122_AddLikeTable2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506092133512_AddLikeTable21.cs" />
+    <Compile Include="Migrations\201506092133512_AddLikeTable21.Designer.cs">
+      <DependentUpon>201506092133512_AddLikeTable21.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506111929223_ChengeFieldName.cs" />
+    <Compile Include="Migrations\201506111929223_ChengeFieldName.Designer.cs">
+      <DependentUpon>201506111929223_ChengeFieldName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506111932002_ChengeFieldName2.cs" />
+    <Compile Include="Migrations\201506111932002_ChengeFieldName2.Designer.cs">
+      <DependentUpon>201506111932002_ChengeFieldName2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -492,6 +532,36 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505041927055_UpdateFriendsTable.resx">
       <DependentUpon>201505041927055_UpdateFriendsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506072128511_AddWallItemImagesTable.resx">
+      <DependentUpon>201506072128511_AddWallItemImagesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506072130138_AddWallItemImagesTable1.resx">
+      <DependentUpon>201506072130138_AddWallItemImagesTable1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506072131330_AddWallItemImagesTable3.resx">
+      <DependentUpon>201506072131330_AddWallItemImagesTable3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506072313381_UpdateWallItemtable.resx">
+      <DependentUpon>201506072313381_UpdateWallItemtable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506092131295_AddLikeTable.resx">
+      <DependentUpon>201506092131295_AddLikeTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506092132367_AddLikeTable1.resx">
+      <DependentUpon>201506092132367_AddLikeTable1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506092133122_AddLikeTable2.resx">
+      <DependentUpon>201506092133122_AddLikeTable2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506092133512_AddLikeTable21.resx">
+      <DependentUpon>201506092133512_AddLikeTable21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506111929223_ChengeFieldName.resx">
+      <DependentUpon>201506111929223_ChengeFieldName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506111932002_ChengeFieldName2.resx">
+      <DependentUpon>201506111932002_ChengeFieldName2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
